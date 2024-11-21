@@ -1,0 +1,64 @@
+﻿@using CoralSeaTaskManagment.Ui.Models.DTO
+@model SchedualeAddDto
+@{
+    ViewBag.PageTitle = "Scheduale Management";
+    ViewBag.CardTitle = "Create Scheduale";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<div className="home-container">
+    <form asp-action="Create" method="post">
+        <div class="mp-3">
+            <label asp-for="OrderId"></label>
+            <input asp-for="OrderId" class="form-control" />
+            <span asp-validation-for="OrderId" class="text-danger"></span>
+        </div>        
+        <div class="mp-3">
+            <label asp-for="ReturnDate"></label>
+            <input id="txtDate" type="date" asp-for="ReturnDate" class="form-control" />
+            <span asp-validation-for="ReturnDate" class="text-danger"></span>
+        </div>
+        <div class="mp-3">
+            <label asp-for="Reason"></label>
+            <input asp-for="Reason" class="form-control" />
+            <span asp-validation-for="Reason" class="text-danger"></span>
+        </div>
+        <div class="mp-3">
+            <label asp-for="HotelId"></label>
+            <select asp-for="HotelId" class="form-control"
+                    asp-items="@(new SelectList(ViewBag.hotels,"Id","Name"))">
+                <option disabled selected>-- Select Hotel -- </option>
+            </select>
+            <span asp-validation-for="HotelId" class="text-danger"></span>
+        </div>
+        <div class="mp-3">
+            <label asp-for="ApplicationUserId"></label>
+            <input asp-for="ApplicationUserId" class="form-control" />
+            <span asp-validation-for="ApplicationUserId" class="text-danger"></span>
+        </div>
+        <div class="mp-3">
+            <button type="submit" class="btn btn-primary">Create</button>
+            <a asp-action="Index" asp-controller="Scheduale" class="btn btn-warning">Back</a>
+        </div>
+    </form>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(function () {
+            var dtToday = new Date();
+
+            var month = dtToday.getMonth() + 1;
+            var day = dtToday.getDate();
+            var year = dtToday.getFullYear();
+            if (month < 10)
+                month = '0' + month.toString();
+            if (day < 10)
+                day = '0' + day.toString();
+
+            var minDate = year + '-' + month + '-' + day;
+
+            $('#txtDate').attr('min', minDate);
+        });</script>
+}
+
+

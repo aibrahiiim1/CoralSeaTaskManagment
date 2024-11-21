@@ -1,0 +1,39 @@
+﻿@using CoralSeaTaskManagment.Ui.Models.DTO
+@model IEnumerable<GitemDto>
+
+@{
+    ViewBag.PageTitle = "Item Management";
+    ViewBag.CardTitle = " Items";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<a class="btn btn-inverse-primary btn-fw" href="/Gitem/Create">Create</a>
+<br />
+<table class="table table-hover" width="100%">
+    <tr>
+        <td>Name</td>
+        <td>NameAr</td>
+        <td>Departments</td>
+        <td>Room Locations</td>
+        <td>Hotels</td>
+        <td>Actions</td>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Name</td>
+            <td>@item.Namear</td>
+            <td>@item.Departments.Name</td>
+            <td>@item.Glocation.Name</td>
+            <td>@item.Hotels.Name</td>
+            <td>
+                <a class="btn btn-outline-warning btn-fw" href="/Gitem/Edit/@item.Id">Edit</a>
+                <a class="btn btn-outline-danger btn-fw" href="/Gitem/Delete/@item.Id">Delete</a>
+
+            </td>
+        </tr>
+    }
+</table>
+@* @section scripts {
+    <script src="~/js/Equipments.js"></script>
+} *@

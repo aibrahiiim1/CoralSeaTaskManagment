@@ -1,0 +1,31 @@
+﻿@using CoralSeaTaskManagment.Ui.Models.DTO
+@model EcategoryAddDto
+@{
+    ViewBag.PageTitle = "category Management";
+    ViewBag.CardTitle = "Create category";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<div className="home-container">
+    <form asp-action="Create" method="post">
+        <div class="mp-3">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="mp-3">
+            <label asp-for="HotelId"></label>
+            <select asp-for="HotelId" class="form-control" style="color:black;background-color:ghostwhite"
+                    asp-items="@(new SelectList(ViewBag.hotels,"Id","Name"))">
+                <option disabled selected>-- Select Hotel -- </option>
+            </select>
+            <span asp-validation-for="HotelId" class="text-danger"></span>
+        </div>
+        <div class="mp-3">
+            <button type="submit" class="btn btn-primary">Create</button>
+            <a asp-action="Index" asp-controller="Ecategory" class="btn btn-warning">Back</a>
+        </div>
+    </form>
+</div>
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }

@@ -1,0 +1,59 @@
+﻿@using CoralSeaTaskManagment.Ui.Models.DTO
+@model GitemDto
+@{
+    ViewBag.PageTitle = "Item Management";
+    ViewBag.CardTitle = "Edit Item";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<div className="home-container">
+    <form asp-action="Edit" method="post">
+        <input asp-for="Id" />
+@*         <input asp-for="GlocationId" /> *@
+
+        <div>
+            <div class="mp-3">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="mp-3">
+                <label asp-for="Namear"></label>
+                <input asp-for="Namear" class="form-control" />
+                <span asp-validation-for="Namear" class="text-danger"></span>
+            </div>
+            <div class="mp-3">
+                <label asp-for="DepartmentId"></label>
+                <select id="DepartmentId" asp-for="DepartmentId" class="form-control"
+                        asp-items="@(new SelectList(ViewBag.departments,"Id","Name"))">
+                    <option disabled selected>-- Select Department -- </option>
+                </select>
+                <span asp-validation-for="DepartmentId" class="text-danger"></span>
+            </div>
+            <div class="mp-3">
+                <label asp-for="GlocationId"></label>
+                <select id="LocationId" asp-for="GlocationId" class="form-control"
+                        asp-items="@(new SelectList(ViewBag.glocations,"Id","Name"))">
+                    <option disabled selected>-- Select Location -- </option>
+                </select>
+                <span asp-validation-for="GlocationId" class="text-danger"></span>
+            </div>
+            <div class="mp-3">
+                <label asp-for="HotelId"></label>
+                <select asp-for="HotelId" class="form-control"
+                        asp-items="@(new SelectList(ViewBag.hotels,"Id","Name"))">
+                    <option disabled selected>-- Select Hotel -- </option>
+                </select>
+                <span asp-validation-for="HotelId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="mp-3">
+            <button type="submit" class="btn btn-primary">Update</button>
+            <a asp-action="Index" asp-controller="Gitem" class="btn btn-warning">Back</a>
+        </div>
+    </form>
+
+
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }
+

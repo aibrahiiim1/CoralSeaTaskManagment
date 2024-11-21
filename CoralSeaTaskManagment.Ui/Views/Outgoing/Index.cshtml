@@ -1,0 +1,48 @@
+﻿@using CoralSeaTaskManagment.Ui.Models.DTO
+@model IEnumerable<OutgoingDto>
+@{
+    ViewBag.PageTitle = "Order Outgoing ";
+    ViewBag.CardTitle = "Outgoing";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<a class="btn btn-primary" href="/Outgoing/Create">Create</a>
+<a class="btn btn-primary" href="/Order/Index">Back Orders</a>
+
+<br />
+<form asp-action="Index">
+    <table class="table table-hover" width="100%">
+
+        <tr>
+            <td>Company Name</td>
+            <td>outgoing no</td>
+            <td>price</td>
+            <td>remarks</td>
+            <td>ReturnDate</td>
+            <td>Order Id</td>
+            <td>Hotel Name</td>
+            <td>Created Date</td>
+            <td>Created By</td>
+            <td>Action</td>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.CompanyName</td>
+                <td>@item.No</td>
+                <td>@item.Price</td>
+                <td>@item.Remark</td>
+                <td>@item.ReturnDate</td>
+                <td>@item.OrderId</td>
+                <td>@item.Hotels.Name</td>
+                <td>@item.CreatedTime</td>
+                <td>@item.ApplicationUserId</td>
+                <td>
+                        <a class="btn btn-success" href="/Outgoing/Edit/@item.Id">Edit</a>
+                        <a class="btn btn-danger" href="/Outgoing/Delete/@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </table>
+
+</form>

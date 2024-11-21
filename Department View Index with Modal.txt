@@ -1,0 +1,120 @@
+@using CoralSeaTaskManagment.Ui.Models.DTO
+@model IEnumerable<DepartmentDto>
+
+@{
+    ViewBag.PageTitle = "Department Management";
+    ViewBag.CardTitle = "Department";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<br />
+<a class="btn btn-inverse-primary btn-fw" asp-controller="Department" asp-action="Create">Create</a>
+<table class="table table-hover" width="100%">
+    <tr>
+        <td>Department Name</td>
+        <td>Department Arabic</td>
+        <td>Hotel Name</td>
+        <td>Action</td>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Name</td>
+            <td>@item.NameAr</td>
+            <td>@item.Hotels.Name</td>
+            <td>
+                <a class="btn btn-outline-warning btn-fw" href="/Department/Edit/@item.Id">Edit</a>
+                <a class="btn btn-outline-danger btn-fw" href="/Department/Delete/@item.Id">Delete</a>
+                <button class="btn btn-primary edit-btn" data-id="@item.Id" data-name="@item.Name" data-hotelId="@item.HotelId" data-nameAr="@item.NameAr">Edit Modal</button>
+            </td>
+        </tr>
+    }
+</table>
+<!-- Modal for editing -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Edit Department</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="@Url.Action("Edit", "Department")">
+                    <input  name="id" id="id" />
+
+                    <div class="form-group">
+                        <label for="departmentName">Department Name</label>
+                        <input type="text" class="form-control" id="name" name="Name" />
+                    </div>
+                    <div class="form-group">
+                        <label for="departmentNameAr">Department Arabic</label>
+                        <input type="text" class="form-control" id="nameAr" name="NameAr" />
+                    </div>
+                    <div class="form-group">
+                        <label for="hotelSelect">Hotel</label>
+                        <select class="form-control" id="hotelId" name="hotelId">
+                            <option value="">Select Hotel</option>
+                            @foreach (var hotel in Model.Select(d => d.Hotels).Distinct())
+                            {
+                                <option value="@hotel.Id">@hotel.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Open modal and populate with product data
+            $('.edit-btn').click(function () {
+                var id = $(this).data('id');
+                var name = $(this).data('name');
+                var nameAr = $(this).data('namear');
+                var hotelId = $(this).data('hotelid');
+               
+                $('#id').val(id);
+                $('#name').val(name);
+                $('#nameAr').val(nameAr);
+                $('#hotelId').val(hotelId);
+                $('#hotelSelect').val(hotelId);
+                $('#editModal').modal('show');
+                console.log($(this).data())
+            });
+
+            // Handle form submission via AJAX
+            $('#editProductForm').submit(function () {
+
+                // var Xid = $('#Xid').val();
+                // var newName = $('#Xname').val();
+                // var newNameAr = $('#nameAr').val();
+                // var newhotelid = $('#hotelId').val();
+                // var hotelId = $('#hotelid').val();
+
+                // Perform AJAX request to update the product
+                $.ajax({
+                    url: '@Url.Action("Edit", "Department")',  // URL to your controller action
+                    type: 'POST',
+                     // data: { id: Xid, name: newName, hotelId: hotelId },
+                    success: function (response) {
+                        if (response.success) {
+                            // Update the table with new product name
+                            // $('button[data-id="' + Xid + '"]').closest('tr').find('td:first').text(newName);
+                            $('#editModal').modal('hide');
+                        } else {
+                            alert("Failed to update product name.");
+                        }
+                    },
+                    error: function () {
+                        alert("Error occurred while updating product.");
+                    }
+                });
+            });
+        });
+    </script>
+}

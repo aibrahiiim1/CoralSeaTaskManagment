@@ -1,0 +1,65 @@
+﻿@using CoralSeaTaskManagment.Ui.Models.DTO
+@model OutgoingAddDto
+<!-- Button trigger modal -->
+<button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary" data-mdb-modal-init data-mdb-target="#staticBackdrop1">
+    Launch modal login form
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop1" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+    <div class="modal-dialog d-flex justify-content-center">
+        <div class="modal-content w-75">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Sign in</h5>
+                <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form>
+                    <input name="ordidout" id="ordidout" />
+                    <!-- Email input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <label asp-for="ItemId"></label>
+                        <input id="itemId" asp-for="ItemId" class="form-control" />
+                    </div>
+
+                    <!-- password input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <label asp-for="No"></label>
+                        <input id="no" asp-for="No" class="form-control" />
+                    </div>                    
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <label asp-for="CompanyName"></label>
+                        <input id="companyName" asp-for="CompanyName" class="form-control" />
+                    </div>                    
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <label asp-for="Price"></label>
+                        <input id="price" asp-for="Price" class="form-control" />
+                    </div>                    
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <label asp-for="Remark"></label>
+                        <input id="remark" asp-for="Remark" class="form-control" />
+                    </div>                    
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <label asp-for="ReturnDate"></label>
+                        <input id="returnDate" asp-for="ReturnDate" class="form-control" type="date" />
+                    </div>                    
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <label asp-for="HotelId"></label>
+                        <select id="hotelId" asp-for="HotelId" class="form-control"
+                                asp-items="@(new SelectList(ViewBag.hotellist,"Id","Name"))">
+                            <option disabled selected>-- Select Hotel -- </option>
+                        </select>
+                    </div>                    
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <label asp-for="ApplicationUserId"></label>
+                        <input id="applicationUserId" asp-for="ApplicationUserId" class="form-control" />
+                    </div>
+
+                    <!-- Submit button -->
+                    <button type="button" onclick="submitFormOutgoing()" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->

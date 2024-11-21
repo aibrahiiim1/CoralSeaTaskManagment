@@ -1,0 +1,73 @@
+﻿@using CoralSeaTaskManagment.Ui.Models.DTO
+@model IEnumerable<DepartmentDto>
+
+@{
+    ViewBag.PageTitle = "Department Management";
+    ViewBag.CardTitle = "Department";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<br />
+<a class="btn btn-inverse-primary btn-fw" asp-controller="Department" asp-action="Create">Create</a>
+<table class="table table-hover" width="100%">
+    <tr>
+        <td>Department Name</td>
+        <td>Department Arabic</td>
+        <td>Hotel Name</td>
+        <td>Action</td>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Name</td>
+            <td>@item.NameAr</td>
+            <td>@item.Hotels.Name</td>
+            <td>
+                <a class="btn btn-outline-warning btn-fw" href="/Department/Edit/@item.Id">Edit</a>
+                <a class="btn btn-outline-danger btn-fw" href="/Department/Delete/@item.Id">Delete</a>
+                <button class="btn btn-primary edit-btn" data-id="@item.Id" data-name="@item.Name" data-hotelId="@item.HotelId" data-nameAr="@item.NameAr">Edit Modal</button>
+            </td>
+        </tr>
+    }
+</table>
+@Html.Partial("_editModal")
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Open modal and populate with product data
+            $('.edit-btn').click(function () {
+                var id = $(this).data('id');
+                var name = $(this).data('name');
+                var nameAr = $(this).data('namear');
+                var hotelId = $(this).data('hotelid');
+               
+                $('#id').val(id);
+                $('#name').val(name);
+                $('#nameAr').val(nameAr);
+                $('#hotelId').val(hotelId);
+                $('#hotelSelect').val(hotelId);
+                $('#editModal').modal('show');
+            });
+
+            // Handle form submission via AJAX
+            $('#editProductForm').submit(function () {
+                // Perform AJAX request to update the product
+                $.ajax({
+                    url: '@Url.Action("Edit", "Department")',  // URL to your controller action
+                    type: 'POST',
+                    success: function (response) {
+                        if (response.success) {
+                            // Update the table with new product name
+                            $('#editModal').modal('hide');
+                        } else {
+                            alert("Failed to update product name.");
+                        }
+                    },
+                    error: function () {
+                        alert("Error occurred while updating product.");
+                    }
+                });
+            });
+        });
+    </script>
+}

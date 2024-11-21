@@ -1,0 +1,150 @@
+﻿@{
+    ViewData["Title"] = "Order Status";
+
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    List<object> toolbarItems = new List<object>();
+    toolbarItems.Add(new { text = "Add", tooltipText = "Add", id = "Add" });
+    toolbarItems.Add(new { text = "Edit", tooltipText = "Edit", id = "Edit" });
+    toolbarItems.Add(new { text = "Delete", tooltipText = "Delete", id = "Delete" });
+    toolbarItems.Add(new { text = "Move", tooltipText = "Move", id = "Move" });
+    toolbarItems.Add(new { text = "Search", align = "Right" });
+    toolbarItems.Add(new { text = "ExcelExport", id = "excelexport" });
+    toolbarItems.Add(new { text = "Print" });
+    List<object> ContextMenuitems = new List<object>();
+    ContextMenuitems.Add(new { text = "Assign", target = ".e-content", id = "Assign" });
+    ContextMenuitems.Add(new { text = "Outgoing", target = ".e-content", id = "Outgoing" });
+}
+
+<!-- Syncfusion Grid -->
+<ejs-grid id="Grid" dataSource="@ViewBag.data" allowExcelExport="true" showColumnChooser='true' allowSorting="true"
+          allowFiltering="true" allowPaging="true " contextMenuItems="ContextMenuitems" contextMenuClick="onContextMenuItemClick"
+           height="500"
+          gridLines="Both" allowSelection="true" enableHover="true" toolbar=toolbarItems toolbar="@(new List<string>() { "Search"})">
+    <e-grid-selectionsettings checkboxMode="ResetOnRowClick" type="Multiple" persistSelection="true"></e-grid-selectionsettings>
+    <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" newRowPosition="Top"></e-grid-editSettings>
+    <e-grid-filtersettings type="CheckBox"></e-grid-filtersettings>
+    <e-grid-pagesettings pageCount="5"></e-grid-pagesettings>
+
+    <e-grid-columns>
+        @* <e-grid-column type="checkbox" headerText="checkbox" width="70"></e-grid-column> *@
+        <e-grid-column type="checkbox" width="10" visible="false"></e-grid-column>
+        <e-grid-column field="Id" isPrimaryKey="true" headerText="ID" textAlign="Left"></e-grid-column>
+        <e-grid-column field="CreatedTime" headerText="CreatedTime" textAlign="Left" width="150" format="d/M/y H:mm"></e-grid-column>
+        <e-grid-column field="OtypeId" headerText="Order Type" textAlign="Left"></e-grid-column>
+        <e-grid-column field="LocationId" headerText="Location"></e-grid-column>
+        <e-grid-column field="DepartmentId" headerText="To"></e-grid-column>
+        <e-grid-column field="ItemId" headerText="Item" width="150"></e-grid-column>
+        <e-grid-column field="OstatusId" headerText="Status"></e-grid-column>
+        <e-grid-column field="PeriorityId" headerText="Urgencny" textAlign="Left"></e-grid-column>
+        <e-grid-column field="HotelId" headerText="Hotel"></e-grid-column>
+        <e-grid-column field="DepartmentFId" headerText="From"></e-grid-column>
+        <e-grid-column field="AssignFlag" headerText="Assign"></e-grid-column>
+        <e-grid-column field="ApplicationUserId" headerText="User"></e-grid-column>
+    </e-grid-columns>
+</ejs-grid>
+
+<!-- Modal for changing Order Status -->
+<div id="orderStatusModal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h3>Change Order Status</h3>
+        <form id="orderStatusForm">
+            <label for="orderStatusDropdown">Select Status:</label>
+            <select id="orderStatusDropdown">
+                <option value="New">New</option>
+                <option value="Pickup">Pickup</option>
+                <option value="Completed">Completed</option>
+                <!-- Add more status options as needed -->
+            </select>
+            <br><br>
+            <button type="button" onclick="submitOrderStatusChange()">Submit</button>
+        </form>
+    </div>
+</div>
+
+<!-- Include Syncfusion and jQuery Scripts -->
+@* <script src="https://cdn.syncfusion.com/ej2/ej2-base/dist/globalize.min.js"></script>
+<script src="https://cdn.syncfusion.com/ej2/ej2-grids/dist/globalize.min.js"></script>
+<script src="https://cdn.syncfusion.com/ej2/ej2-buttons/dist/ej2-buttons.min.js"></script>
+<script src="https://cdn.syncfusion.com/ej2/ej2-grids/dist/ej2-grids.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> *@
+<script>
+
+
+
+    // Handle the context menu item click event
+    function onContextMenuItemClick(args) {
+        // Initialize the grid instance
+        var grid = document.getElementById('Grid').ej2_instances[0];
+        if (args.item.text === 'Assign') {
+
+
+            // Get the selected row data
+            var rowData = grid.getSelectedRecords()[0];
+            // Open modal with the row data
+        }
+        if (args.item.text === 'Outgoing') {
+            // Get the selected row data
+            var selectedRow = grid.getSelectedRecords()[0];
+            // Open modal with the row data
+            
+        }
+
+        // Show the modal and pass the Order ID
+        showOrderStatusModal(selectedRow);
+    }
+
+    // Function to show the modal and populate the dropdown
+    function showOrderStatusModal(selectedRow) {
+        // Show the modal
+        $("#orderStatusModal").show();
+
+        // // Populate the dropdown with the current status of the order
+        // var dropdown = $("#orderStatusDropdown");
+        // var currentStatus = orders.find(order => order.Id === orderId).OrderStatus;
+        // dropdown.val(currentStatus);
+
+        // Save the order ID in a hidden field or global variable
+        $("#orderStatusModal").data('id', selectedRow);
+    }
+
+    // Close the modal
+    function closeModal() {
+        $("#orderStatusModal").hide();
+    }
+
+    // Function to handle the order status change
+    function submitOrderStatusChange() {
+        var orderId = $("#orderStatusModal").data('orderId');
+        var newStatus = $("#orderStatusDropdown").val();
+
+        // Send the order status change to the server
+        $.ajax({
+            url: '@Url.Action("UpdateOrderStatus", "Orders")', // URL to controller action
+            type: 'POST',
+            data: {
+                orderId: orderId,
+                newStatus: newStatus
+            },
+            success: function (response) {
+                // Optionally, update the grid to reflect the new status
+                updateOrderStatusInGrid(orderId, newStatus);
+
+                // Close the modal
+                closeModal();
+            },
+            error: function (error) {
+                console.error("Error updating order status", error);
+            }
+        });
+    }
+
+    // Update the order status in the grid after successful submission
+    function updateOrderStatusInGrid(orderId, newStatus) {
+        var order = orders.find(o => o.OrderID === orderId);
+        if (order) {
+            order.OrderStatus = newStatus;
+            grid.refresh();
+        }
+    }
+</script>

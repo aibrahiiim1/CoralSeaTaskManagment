@@ -1,0 +1,140 @@
+﻿@using CoralSeaTaskManagment.Ui.Models.DTO
+@model ItemDto
+@{
+    ViewBag.PageTitle = "Item Management";
+    ViewBag.CardTitle = "Edit Item";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<div className="home-container">
+    <form asp-action="Edit" method="post">
+        <input asp-for="Id" />
+
+        <div>
+            <div class="mp-3">
+                <label asp-for="Code"></label>
+                <input asp-for="Code" class="form-control" />
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+            <div class="mp-3">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="mp-3">
+                <label asp-for="Namear"></label>
+                <input asp-for="Namear" class="form-control" />
+                <span asp-validation-for="Namear" class="text-danger"></span>
+            </div>
+            <div class="mp-3">
+                <label asp-for="EcategoryId"></label>
+                <select asp-for="EcategoryId" class="form-control"
+                        asp-items="@(new SelectList(ViewBag.ecategory,"Id","Name"))">
+                    <option disabled selected>-- Select category -- </option>
+                </select>
+                <span asp-validation-for="EcategoryId" class="text-danger"></span>
+            </div>
+            <div class="mp-3">
+                <label asp-for="DepartmentId"></label>
+                <select id="DepartmentId" asp-for="DepartmentId" class="form-control"
+                        asp-items="@(new SelectList(ViewBag.departments,"Id","Name"))">
+                    <option disabled selected>-- Select Department -- </option>
+                </select>
+                <span asp-validation-for="DepartmentId" class="text-danger"></span>
+            </div>
+            <div class="mp-3">
+                <label asp-for="LocationId"></label>
+                <select id="LocationId" asp-for="LocationId" class="form-control"
+                        asp-items="@(new SelectList(ViewBag.location,"Id","Name"))">
+                    <option disabled selected>-- Select Location -- </option>
+                </select>
+                <span asp-validation-for="LocationId" class="text-danger"></span>
+            </div>
+            <div class="mp-3">
+                <label asp-for="Manufacturer"></label>
+                <input asp-for="Manufacturer" class="form-control" />
+                <span asp-validation-for="Manufacturer" class="text-danger"></span>
+            </div>
+            <div class="mp-3">
+                <label asp-for="InstallDate"></label>
+                <input asp-for="InstallDate" class="form-control" />
+                <span asp-validation-for="InstallDate" class="text-danger"></span>
+            </div>
+            <div class="mp-3">
+                <label asp-for="Warranty"></label>
+                <input asp-for="Warranty" class="form-control" />
+                <span asp-validation-for="Warranty" class="text-danger"></span>
+            </div>
+            <div class="mp-3">
+                <label asp-for="EfamilyId"></label>
+                <select asp-for="EfamilyId" class="form-control"
+                        asp-items="@(new SelectList(ViewBag.efamily,"Id","Name"))">
+                    <option disabled selected>-- Select Family -- </option>
+
+                </select>
+                <span asp-validation-for="EfamilyId" class="text-danger"></span>
+            </div>
+            @*          <div class="mp-3">
+            <label asp-for="EstatusId"></label>
+            <select asp-for="EstatusId" class="form-control"
+            asp-items="ViewBag.estatus">
+            <option disabled selected>-- Select Status -- </option>
+
+            </select>
+            <span asp-validation-for="EstatusId" class="text-danger"></span>
+            </div>*@
+            <div class="mp-3">
+                <label asp-for="Cost"></label>
+                <input asp-for="Cost" class="form-control" />
+                <span asp-validation-for="Cost" class="text-danger"></span>
+            </div>
+            <div class="mp-3">
+                <label asp-for="WarrantyYear"></label>
+                <input asp-for="WarrantyYear" class="form-control" />
+                <span asp-validation-for="WarrantyYear" class="text-danger"></span>
+            </div>
+            <div class="mp-3">
+                <label asp-for="WarrantyStart"></label>
+                <input asp-for="WarrantyStart" class="form-control" />
+                <span asp-validation-for="WarrantyStart" class="text-danger"></span>
+            </div>
+            <div class="mp-3">
+                <label asp-for="EclassId"></label>
+                <select asp-for="EclassId" class="form-control"
+                        asp-items="@(new SelectList(ViewBag.eclass,"Id","Name"))">
+                    <option disabled selected>-- Select Class -- </option>
+
+                </select>
+                <span asp-validation-for="EclassId" class="text-danger"></span>
+            </div>
+            <div class="mp-3">
+                <label asp-for="Agent"></label>
+                <input asp-for="Agent" class="form-control" />
+                <span asp-validation-for="Agent" class="text-danger"></span>
+            </div>
+            <div class="mp-3">
+                <label asp-for="Pic"></label>
+                <input type="file" name="file" id="imgfile" class="form-control" />
+            </div>
+            <div class="mp-3">
+                <label asp-for="HotelId"></label>
+                <select asp-for="HotelId" class="form-control"
+                        asp-items="@(new SelectList(ViewBag.hotels,"Id","Name"))">
+                    <option disabled selected>-- Select Hotel -- </option>
+
+                </select>
+                <span asp-validation-for="HotelId" class="text-danger"></span>
+            </div>
+
+        </div>
+
+        <div class="mp-3">
+            <button type="submit" class="btn btn-primary">Update</button>
+            <a asp-action="Index" asp-controller="Item" class="btn btn-warning">Back</a>
+        </div>
+    </form>
+
+
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }
+

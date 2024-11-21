@@ -1,0 +1,30 @@
+﻿@using CoralSeaTaskManagment.Ui.Models.DTO
+@model IEnumerable<LocationDto>
+@{
+    ViewBag.PageTitle = "Location Management";
+    ViewBag.CardTitle = "Location";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<br />
+<a class="btn btn-inverse-primary btn-fw" href="/Location/Create">Create</a>
+<table class="table table-hover" width="100%">
+    <tr>
+        <td>Location</td>
+        <td>Location Arabic</td>
+        <td>Department</td>
+        <td>Property</td>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Name</td>
+            <td>@item.NameAr</td>
+            <td>@item.Departments.Name</td>
+            <td>@item.Hotels.Name</td>
+            <td>
+                <a class="btn btn-outline-warning btn-fw" href="/Location/Edit/@item.Id">Edit</a>
+                <a class="btn btn-outline-danger btn-fw" href="/Location/Delete/@item.Id">Delete</a>
+            </td>
+        </tr>
+    }
+</table>

@@ -1,0 +1,30 @@
+﻿@using CoralSeaTaskManagment.Ui.Models.DTO
+@model IEnumerable<GroomDto>
+
+@{
+    ViewBag.PageTitle = "Rooms Management";
+    ViewBag.CardTitle = "Rooms";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<a class="btn btn-inverse-primary btn-fw" href="/Grooms/Create">Create</a>
+<br />
+<table class="table table-hover" width="100%">
+    <tr>
+        <td>Room#</td>
+        <td>Building</td>
+        <td>Hotel Name</td>
+        <td>Action</td>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Name</td>
+            <td>@item.Building</td>
+            <td>@item.Hotels.Name</td>
+            <td>
+                <a class="btn btn-outline-warning btn-fw" href="/Grooms/Edit/@item.Id">Edit</a>
+                <a class="btn btn-outline-danger btn-fw" href="/Grooms/Delete/@item.Id">Delete</a>
+            </td>
+        </tr>
+    }
+</table>

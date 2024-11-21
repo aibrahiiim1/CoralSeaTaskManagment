@@ -1,0 +1,44 @@
+﻿@using CoralSeaTaskManagment.Ui.Models.DTO
+@model IEnumerable<SchedualeDto>
+
+@{
+    ViewBag.PageTitle = "Scheduale Order";
+    ViewBag.CardTitle = "Scheduale Order";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<a class="btn btn-primary" href="/Scheduale/Create">Create</a>
+<a class="btn btn-primary" href="/Order/Index">Back Orders</a>
+
+<br />
+<form asp-action="Index">
+    <table class="table table-hover" width="100%">
+
+        <tr>
+            <td>Order Id</td>
+            <td>Schedualed Date</td>
+            <td>reason</td>
+            <td>Hotel Name</td>
+            <td>Created Date</td>
+            <td>Scheduale By</td>
+            <td>Action</td>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.OrderId</td>
+                <td>@item.ReturnDate</td>
+                <td>@item.Reason</td>
+                <td>@item.Hotels.Name</td>
+                <td>@item.CreatedTime</td>
+                <td>@item.ApplicationUserId</td>
+                <td>
+
+                        <a class="btn btn-success" href="/Scheduale/Edit/@item.Id">Edit</a>
+                        <a class="btn btn-danger" href="/Scheduale/Delete/@item.Id">Delete</a>
+                </td>
+            </tr>  
+        }
+    </table>
+
+</form>

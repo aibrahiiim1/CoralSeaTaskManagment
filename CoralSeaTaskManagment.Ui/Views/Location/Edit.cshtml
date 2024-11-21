@@ -1,0 +1,33 @@
+﻿@using CoralSeaTaskManagment.Ui.Models.DTO
+@model LocationDto
+
+@{
+    ViewBag.PageTitle = "Location Management";
+    ViewBag.CardTitle = "Location";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div className="home-container">
+    <form asp-action="Edit" method="post">
+        <input  asp-for="Id" />
+        <input  asp-for="Hotels.Id" />
+        <input  asp-for="Departments.Id" />
+        <div class="mp-3">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="mp-3">
+            <label asp-for="NameAr"></label>
+            <input asp-for="NameAr" class="form-control" />
+            <span asp-validation-for="NameAr" class="text-danger"></span>
+        </div>
+        <div class="mp-3">
+            <button type="submit" class="btn btn-primary">Edit</button>
+            <a asp-action="Index" asp-controller="Location" class="btn btn-warning">Back</a>
+        </div>
+    </form>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

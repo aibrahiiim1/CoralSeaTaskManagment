@@ -1,0 +1,39 @@
+﻿<!-- Modal for editing -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Edit Department</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="@Url.Action("Edit", "Department")">
+                    <input name="id" id="id" />
+                    @* <input name="hotelId" id="hotelId" /> *@
+
+                    <div class="form-group">
+                        <label for="departmentName">Department Name</label>
+                        <input type="text" class="form-control" id="name" name="Name" />
+                    </div>
+                    <div class="form-group">
+                        <label for="departmentNameAr">Department xxArabicxx</label>
+                        <input type="text" class="form-control" id="nameAr" name="NameAr" />
+                    </div>
+                    <div class="form-group">
+                        <label for="hotelSelect">Hotel</label>
+                        <select class="form-control" id="hotelId" name="hotelId" asp-items="@(new SelectList(ViewBag.hotellist,"Id","Name"))">
+                            <option value="">Select Hotel</option>
+@*                             @foreach (var hotel in Model.Select(d => d.Hotels).Distinct())
+                            {
+                                <option value="@hotel.Id">@hotel.Name</option>
+                            } *@
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

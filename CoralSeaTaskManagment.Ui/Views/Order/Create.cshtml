@@ -1,0 +1,124 @@
+﻿@using CoralSeaTaskManagment.Ui.Models.DTO
+@model OrderDto
+@{
+    ViewBag.PageTitle = "CreateNewOrder";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<div className="home-container">
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
+        <div>
+            <div class="mp-3">
+                @* <label asp-for="DepartmentId"></label> *@
+                <label>"From"</label>
+                <select id="DepartmentId" asp-for="DepartmentId" class="form-control"
+                        asp-items="@(new SelectList(ViewBag.departments,"Id","Name"))">
+                    <option disabled selected>-- "Select From" -- </option>
+                </select>
+                <span asp-validation-for="DepartmentId" class="text-danger"></span>
+            </div>
+            <div class="mp-3">
+                @* <label asp-for="OtypeId"></label> *@
+                <label>"OrderType"</label>
+                <select asp-for="OtypeId" class="form-control"
+                        asp-items="@(new SelectList(ViewBag.otype,"Id","Name"))">
+                    <option disabled selected>-- "SelectOrderType" -- </option>
+                </select>
+                <span asp-validation-for="OtypeId" class="text-danger"></span>
+            </div><br>
+
+            <div class="mp-3">
+                @* <label asp-for="DepartmentId"></label> *@
+                <label>"To"</label>
+                <select asp-for="DepartmentFId" class="form-control"
+                        asp-items="@(new SelectList(ViewBag.departments,"Id","Name"))">
+                    <option disabled selected>-- "SelectDepartment" -- </option>
+                </select>
+                <span asp-validation-for="DepartmentFId" class="text-danger"></span>
+            </div>
+            <div class="mp-3">
+                @* <label asp-for="LocationId"></label> *@
+                <label> "Location"</label>
+                <select asp-for="LocationId" id="LocationId" class="form-control"
+                        asp-items="@(new SelectList(ViewBag.location,"Id","Name"))">
+                    <option disabled selected>-- "SelectLocation" -- </option>
+                </select>
+                <span asp-validation-for="LocationId" class="text-danger"></span>
+            </div>            
+
+            <div class="mp-3">
+                @* <label asp-for="ItemId"></label> *@
+                <label>"ItemName"</label>
+                <select asp-for="ItemId" class="form-control"
+                        asp-items="@(new SelectList(ViewBag.item,"Id","Name"))">
+                    <option disabled selected>-- "SelectItemName" -- </option>
+                </select>
+                <span asp-validation-for="ItemId" class="text-danger"></span>
+            </div>
+            <div class="mp-3">
+                @* <label asp-for="PeriorityId"></label> *@
+                <label> "Urgency"</label>
+                <select asp-for="PeriorityId" class="form-control"
+                        asp-items="@(new SelectList(ViewBag.periority,"Id","Name"))">
+                    <option disabled selected>-- "SelectUrgency" -- </option>
+                </select>
+                <span asp-validation-for="PeriorityId" class="text-danger"></span>
+            </div>
+            <div class="mp-3">
+                @* <label asp-for="Pic"></label> *@
+                <label>"AttachPic"</label>
+                <input type="file" name="file" id="imgfile" class="form-control" />
+            </div>
+            <div class="mp-3">
+                @* <label asp-for="Comment" ></label> *@
+                <label>"Comment"</label>
+                <input asp-for="Comment" class="form-control form-control-lg" />
+                <span asp-validation-for="Comment" class="text-danger"></span>
+            </div>
+            <div class="mp-3">
+                @* <label asp-for="PeriorityId"></label> *@
+                <label> "Hotel"</label>
+                <select asp-for="HotelId" class="form-control"
+                        asp-items="@(new SelectList(ViewBag.hotels,"Id","Name"))">
+                    <option disabled selected>-- "Select Hotel" -- </option>
+                </select>
+                <span asp-validation-for="HotelId" class="text-danger"></span>
+            </div>
+        </div>
+        <br />
+        <div class="mp-3">
+            <button type="submit" class="btn btn-primary">"Send"</button>
+            @* <a asp-action="Index" asp-controller="Order" class="btn btn-warning">Back</a> *@
+            <a asp-action="Index" asp-controller="Dashboard" class="btn btn-warning">"Back"</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            $('#DepartmentId').on('change', function () {
+                var id = $(this).val();
+                var loclist = $('#LocationId')
+                loclist.empty();
+                loclist.append('<option></option>');
+                if (id !== '') {
+                    $.ajax({
+                        url: '/Order/Getloc?id=' + id,
+                        success: function (locations) {
+                            $.each(locations, function (i, Location) {
+                                loclist.append($('<option></option>').attr('value', Location.id).text(Location.name));
+                            });
+
+                        },
+                        error: function (locations) {
+                            alert('Somthing wrong basha');
+                        }
+                    });
+                }
+                console.log($(this).val());
+            });
+        });
+    </script>
+}
+

@@ -1,0 +1,71 @@
+﻿@using CoralSeaTaskManagment.Ui.Models.DTO
+
+@model SpartDto
+@{
+    ViewBag.PageTitle = "Spart Management";
+    ViewBag.CardTitle = "Create Spart";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@Html.AntiForgeryToken()
+<div className="home-container">
+    <form asp-action="Create" method="post">
+        <div class="mp-3">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="mp-3">
+            <label asp-for="Q"></label>
+            <input asp-for="Q" class="form-control" />
+            <span asp-validation-for="Q" class="text-danger"></span>
+        </div>
+        <div class="mp-3">
+            <label asp-for="Unit"></label>
+            <input asp-for="Unit" class="form-control" />
+            <span asp-validation-for="Unit" class="text-danger"></span>
+        </div>        
+        <div class="mp-3">
+            <label asp-for="Price"></label>
+            <input asp-for="Price" class="form-control" />
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+        <div class="mp-3">
+            <label asp-for="HotelId"></label>
+            <select asp-for="HotelId" class="form-control" style="color:black;background-color:ghostwhite"
+                    asp-items="@(new SelectList(ViewBag.hotels,"Id","Name"))">
+                <option disabled selected>-- Select Hotel -- </option>
+            </select>
+            <span asp-validation-for="HotelId" class="text-danger"></span>
+        </div>
+        <div class="mp-3">
+            <label asp-for="OrderId"></label>
+            <input asp-for="OrderId" class="form-control" />
+            <span asp-validation-for="OrderId" class="text-danger"></span>
+        </div>        
+        <div class="mp-3">
+            <label asp-for="ApplicationUserId"></label>
+            <input asp-for="ApplicationUserId" class="form-control" />
+            <span asp-validation-for="ApplicationUserId" class="text-danger"></span>
+        </div>        
+        <div class="mp-3">
+            <label asp-for="ItemId"></label>
+            <input asp-for="ItemId" class="form-control" />
+            <span asp-validation-for="ItemId" class="text-danger"></span>
+        </div>
+        <div class="mp-3">
+            <button type="submit" class="btn btn-primary" onclick="disableButton(this)">Create</button>
+            <a onclick="window.history.back()" class="btn btn-warning">Back</a>
+        </div>
+    </form>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        function disableButton(button) {
+            button.disabled = true;
+            button.form.submit(); // or any other function you want to call
+        }
+    </script>
+}
+
+

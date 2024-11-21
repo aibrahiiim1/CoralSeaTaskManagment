@@ -1,0 +1,37 @@
+﻿@using CoralSeaTaskManagment.Ui.Models.DTO
+
+@model IEnumerable<PeriorityDto>
+
+@{
+    ViewBag.PageTitle = "Hotel Management";
+    ViewBag.CardTitle = "Hotel";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<head>
+    <link rel="stylesheet" href="https://cdn.syncfusion.com/ej2/26.1.35/fluent.css" />
+</head>
+
+<br />
+<a class="btn btn-inverse-primary btn-fw" href="/Periority/Create">Create</a>
+<table class="table table-hover" width="100%">
+    <thead>
+        <tr>
+            <th scope="col">Periority Name</th>
+            <th scope="col">Periority Arabic</th>
+            <th scope="col">Actions</th>
+
+        </tr>
+    </thead>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Name</td>
+            <td>@item.NameAr</td>
+            <td>
+                <a class="btn btn-outline-warning btn-fw" href="/Periority/Edit/@item.Id">Edit</a>
+                <a type="button" class="btn btn-outline-danger btn-fw" href="/Periority/Delete/@item.Id">Delete</a>
+            </td>
+        </tr>
+    }
+</table>
+

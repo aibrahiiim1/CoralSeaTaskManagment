@@ -1,0 +1,45 @@
+﻿@using CoralSeaTaskManagment.Ui.Models.DTO
+@model IEnumerable<SpartDto>
+@{
+    ViewBag.PageTitle = "Order Spare part ";
+    ViewBag.CardTitle = "Spare part";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<a class="btn btn-primary" href="/Spart/Create">Create</a>
+<a class="btn btn-primary" href="/Order/Index">Back Orders</a>
+<br />
+<form asp-action="Index">
+    <table class="table table-hover" width="100%">
+
+        <tr>
+            <td>Spare Item Name</td>
+            <td>Quantity</td>
+            <td>Cost</td>
+            <td>Unit</td>
+            <td>OrderID</td>
+            <td>ItemID</td>
+            <td>Hotel</td>
+            <td>User</td>
+            <td>Action</td>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Q</td>
+                <td>@item.Price</td>
+                <td>@item.Unit</td>
+                <td>@item.OrderId</td>
+                <td>@item.Items.Name</td>
+                <td>@item.Hotels.Name</td>
+                <td>@item.ApplicationUserId</td>
+                <td>
+                        <a class="btn btn-success" href="/Spart/Edit/@item.Id">Edit</a>
+                        <a class="btn btn-danger" href="/Spart/Delete/@item.Id">Delete</a>  
+                </td>
+            </tr>
+          }
+    </table>
+
+</form>

@@ -1,0 +1,34 @@
+﻿@using CoralSeaTaskManagment.Ui.Models.DTO
+@model IEnumerable<AssignationDto>
+@{
+    ViewBag.PageTitle = "Assignation Management";
+    ViewBag.CardTitle = "Assignation";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<br />
+<a class="btn btn-inverse-primary btn-fw" href="/Assignation/Create">Create</a>
+<table class="table table-hover" width="100%">
+    <tr>
+        <td>Section</td>
+        <td>Name</td>
+        <td>User</td>
+        <td>Hotel</td>
+        <td>OrderID</td>
+
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Assigns.Name</td>
+            <td>@item.TechName</td>
+            <td>@item.ApplicationUserId</td>
+            <td>@item.Hotels.Name</td>
+            <td>@item.OrderId</td>
+
+            <td>
+                <a class="btn btn-outline-warning btn-fw" href="/Assignation/Edit/@item.Id">Edit</a>
+                <a class="btn btn-outline-danger btn-fw" href="/Assignation/Delete/@item.Id">Delete</a>
+            </td>
+        </tr>
+    }
+</table>

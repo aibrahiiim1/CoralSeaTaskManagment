@@ -1,0 +1,40 @@
+﻿@using CoralSeaTaskManagment.Ui.Models.DTO
+@model SchedualeDto
+<!-- Modal for editing -->
+<div class="modal fade" id="SchedualeModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Scheduale</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    @* <span>&times;</span> *@
+                </button>
+            </div>
+            <div class="modal-body">
+                <form name="OutgoingModalForm" id="editForm">
+                    <input name="ordids" id="ordids" />
+                    <input name="applicationUserIds" id="applicationUserIds" />
+                    <div class="form-group">
+                        <label asp-for="Reason"></label>
+                        <input id="reasons" asp-for="Reason" class="form-control" />
+                        <span asp-validation-for="Reason" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ReturnDate"></label>
+                        <input id="returnDates" asp-for="ReturnDate" class="form-control" type="date" />
+                        <span asp-validation-for="ReturnDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="HotelId"></label>
+                        <select id="hotelIds" asp-for="HotelId" class="form-control"
+                                asp-items="@(new SelectList(ViewBag.hotellist,"Id","Name"))">
+                            <option disabled selected>-- Select Hotel -- </option>
+                        </select>
+                        <span asp-validation-for="HotelId" class="text-danger"></span>
+                    </div>
+                    <button type="button" onclick="submitScheduale()" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,45 @@
+﻿@using CoralSeaTaskManagment.Ui.Models.DTO
+@model AssignAddDto
+@{
+    ViewBag.PageTitle = "Assign Management";
+    ViewBag.CardTitle = "Create Assign";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<div className="home-container">
+    <form asp-action="Create" method="post">
+        <div class="mp-3">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="mp-3">
+            <label asp-for="NameAr"></label>
+            <input asp-for="NameAr" class="form-control" />
+            <span asp-validation-for="NameAr" class="text-danger"></span>
+        </div>
+        <div class="mp-3">
+            <label asp-for="DepartmentId"></label>
+            <select asp-for="DepartmentId" class="form-control"
+                    asp-items="@(new SelectList(ViewBag.departments,"Id","Name"))">
+                <option disabled selected>-- Select Department -- </option>
+            </select>
+            <span asp-validation-for="DepartmentId" class="text-danger"></span>
+        </div>
+        <div class="mp-3">
+            <label asp-for="HotelId"></label>
+            <select asp-for="HotelId" class="form-control"
+                    asp-items="@(new SelectList(ViewBag.hotels,"Id","Name"))">
+                <option disabled selected>-- Select Hotel -- </option>
+            </select>
+            <span asp-validation-for="HotelId" class="text-danger"></span>
+
+        </div>
+        <div class="mp-3">
+                <button type="submit" class="btn btn-primary">Create</button>
+            <a asp-action="Index" asp-controller="Assign" class="btn btn-warning">Back</a>
+        </div>
+    </form>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

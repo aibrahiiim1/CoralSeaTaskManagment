@@ -1,0 +1,70 @@
+﻿@using CoralSeaTaskManagment.Ui.Models.DTO
+@model OutgoingDto
+<!-- Modal for editing -->
+<div class="modal fade" id="OutgoingModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Outgoing</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    @* <span>&times;</span> *@
+                </button>
+            </div>
+            <div class="modal-body">
+                <form name="OutgoingModalForm" id="editForm">
+                    <input name="ordidout" id="ordidout" />
+                    @*                     <input name="hotelIdout" id="hotelIdout" /> *@
+@*                     <div class="form-group">
+                        <label asp-for="OrderId"></label>
+                        <input asp-for="OrderId" class="form-control" />
+                        <span asp-validation-for="OrderId" class="text-danger"></span>
+                    </div> *@
+                    <div class="form-group">
+                        <label asp-for="ItemId"></label>
+                        <input id="itemIdx" asp-for="ItemId" class="form-control" />
+                        <span asp-validation-for="ItemId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label  asp-for="No"></label>
+                        <input id="nox" asp-for="No" class="form-control" />
+                        <span asp-validation-for="No" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="CompanyName"></label>
+                        <input id="companyNamex" asp-for="CompanyName" class="form-control" />
+                        <span asp-validation-for="CompanyName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Price"></label>
+                        <input id="pricex" asp-for="Price" class="form-control" />
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Remark"></label>
+                        <input id="remarkx" asp-for="Remark" class="form-control" />
+                        <span asp-validation-for="Remark" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ReturnDate"></label>
+                        <input id="returnDatex" asp-for="ReturnDate" class="form-control" type="date" />
+                        <span asp-validation-for="ReturnDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="HotelId"></label>
+                        <select id="hotelIdxx" asp-for="HotelId" class="form-control"
+                                asp-items="@(new SelectList(ViewBag.hotellist,"Id","Name"))">
+                            <option disabled selected>-- Select Hotel -- </option>
+                        </select>
+                        <span asp-validation-for="HotelId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ApplicationUserId"></label>
+                        <input id="applicationUserIdx" asp-for="ApplicationUserId" class="form-control" />
+                        <span asp-validation-for="ApplicationUserId" class="text-danger"></span>
+                    </div>
+                    <button type="button" onclick="submitOutgoing()" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

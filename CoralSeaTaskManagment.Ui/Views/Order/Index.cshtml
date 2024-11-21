@@ -1,0 +1,273 @@
+﻿@{
+    ViewBag.PageTitle = "Back Orders";
+    ViewBag.CardTitle = "Back";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    List<object> toolbarItems = new List<object>();
+    toolbarItems.Add(new { text = "Add", tooltipText = "Add", id = "Add" });
+    toolbarItems.Add(new { text = "Edit", tooltipText = "Edit", id = "Edit" });
+    toolbarItems.Add(new { text = "Delete", tooltipText = "Delete", id = "Delete" });
+    toolbarItems.Add(new { text = "Move", tooltipText = "Move", id = "Move" });
+    toolbarItems.Add(new { text = "Search", align = "Right" });
+    toolbarItems.Add(new { text = "ExcelExport", id = "excelexport" });
+    toolbarItems.Add(new { text = "Print" });
+    List<object> ContextMenuitems = new List<object>();
+    ContextMenuitems.Add(new { text = "Assign", target = ".e-content", id = "Assign" });
+    ContextMenuitems.Add(new { text = "Outgoing", target = ".e-content", id = "Outgoing" });
+    ContextMenuitems.Add(new { text = "Scheduale", target = ".e-content", id = "Scheduale" });
+}
+
+
+
+@* <button id="Editeq" class="btn btn-success" type="button" onclick="Editeq">Edit</button>
+<button id="Deleteeq" class="btn btn-danger" type="button" onclick="Deleteeq">Delete</button>
+<button id="Moveeq" class="btn btn-warning" type="button" onclick="Moveeq">Move</button> *@
+
+<ejs-grid id="Grid" dataSource="@ViewBag.data" allowExcelExport="true" showColumnChooser='true' allowSorting="true"
+          allowFiltering="true" allowPaging="true " contextMenuItems="ContextMenuitems" contextMenuClick="contextMenuClick"
+          toolbarClick="toolbarClick" height="500"
+          gridLines="Both" allowSelection="true" enableHover="true" toolbar=toolbarItems toolbar="@(new List<string>() { "Search"})">
+    <e-grid-selectionsettings checkboxMode="ResetOnRowClick" type="Multiple" persistSelection="true"></e-grid-selectionsettings>
+    <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" newRowPosition="Top"></e-grid-editSettings>
+    <e-grid-filtersettings type="CheckBox"></e-grid-filtersettings>
+    <e-grid-pagesettings pageCount="5"></e-grid-pagesettings>
+
+    <e-grid-columns>
+        @* <e-grid-column type="checkbox" headerText="checkbox" width="70"></e-grid-column> *@
+        <e-grid-column type="checkbox" width="10" visible="false"></e-grid-column>
+        <e-grid-column field="Id" isPrimaryKey="true" headerText="ID" textAlign="Left" ></e-grid-column>
+        <e-grid-column field="CreatedTime" headerText="CreatedTime" textAlign="Left" width="150" format="d/M/y H:mm"></e-grid-column>
+        <e-grid-column field="OtypeId" headerText="Order Type" textAlign="Left" ></e-grid-column>
+        <e-grid-column field="LocationId" headerText="Location" ></e-grid-column>
+        <e-grid-column field="DepartmentId" headerText="To"></e-grid-column>
+        <e-grid-column field="ItemId" headerText="Item" width="150"></e-grid-column>
+        <e-grid-column field="OstatusId" headerText="Status" ></e-grid-column>
+        <e-grid-column field="PeriorityId" headerText="Urgencny" textAlign="Left"></e-grid-column>
+        <e-grid-column field="HotelId" headerText="Hotel"></e-grid-column>
+        <e-grid-column field="DepartmentFId" headerText="From" ></e-grid-column>
+        <e-grid-column field="AssignFlag" headerText="Assign" ></e-grid-column>
+        <e-grid-column field="ApplicationUserId" headerText="User" ></e-grid-column>
+    </e-grid-columns>
+</ejs-grid>
+
+@Html.Partial("_AssignationModal")
+@Html.Partial("_OutgoingModal")
+@Html.Partial("_SchedualeModal")
+
+<script>
+    function toolbarClick(args) {
+
+        if (args.item.id === 'Add') {
+            window.location.href = '/Order/Create/';
+        }
+        if (args.item.id === "Edit") {
+            var gridInstance = document.getElementById("Grid").ej2_instances[0];
+            var selectedrecords = gridInstance.getSelectedRecords();
+            console.log('selectedrecords:', selectedrecords);
+            console.log('ID:', selectedrecords[0]['Id']);
+            $('#id').val(selectedrecords[0]['Id']);
+            window.location.href = '/Order/Edit/' + selectedrecords[0]['Id'];
+        }
+        if (args.item.id === "Delete") {
+            var gridInstance = document.getElementById("Grid").ej2_instances[0];
+            var selectedrecords = gridInstance.getSelectedRecords();
+            console.log('selectedrecords:', selectedrecords);
+            console.log('ID:', selectedrecords[0]['Id']);
+            $('#id').val(selectedrecords[0]['Id']);
+            window.location.href = '/Order/Delete/' + selectedrecords[0]['Id'];
+        }
+        if (args.item.id === "excelexport") {
+            var gridObj = document.getElementById("Grid").ej2_instances[0];
+            gridObj.excelExport();
+
+        }
+    }
+</script>
+
+@* right Click event *@
+<script>
+    // Event handler for context menu click
+function contextMenuClick(args){
+        // Initialize the grid instance
+        var grid = document.getElementById('Grid').ej2_instances[0];
+    if (args.item.text === 'Assign') {
+        
+
+    // Get the selected row data
+        var rowData = grid.getSelectedRecords()[0];
+        // Open modal with the row data
+        openEditModal(rowData);
+    }    
+    if (args.item.text === 'Outgoing') {
+    // Get the selected row data
+            var selectedRow = grid.getSelectedRecords()[0];
+        // Open modal with the row data
+            OutgoingModal(selectedRow);
+    }
+        if (args.item.text === 'Scheduale') {
+    // Get the selected row data
+            var Rows = grid.getSelectedRecords()[0];
+        // Open modal with the row data
+            SchedualeModal(Rows);
+    }
+}
+</script>
+
+
+@* right Click Assign *@
+<script>
+    function openEditModal(rowData) {
+    // Populate the form fields with row data
+        document.getElementById('id').value = rowData.Id;
+        document.getElementById('hotelId').value = rowData.HotelId;
+    // document.getElementById('CreatedTime').value = new Date(rowData.OrderDate).toISOString().split('T')[0]; // Format date for input
+
+    // Show the modal
+// $('#AssignationModal').new modal('show');
+    var myModal = new bootstrap.Modal(document.getElementById('AssignationModal'));
+    myModal.show();
+}
+</script>
+<script>
+    function submitForm() {
+    // Gather data from form
+    var assignationAddDto = {
+        OrderId: document.getElementById('id').value,
+        HotelId: document.getElementById('hotelId').value,
+        TechName: document.getElementById('TechName').value,
+        AssignId: document.getElementById('AssignId').value,
+
+
+        // OrderDate: document.getElementById('orderDate').value
+    };
+            console.log(assignationAddDto);
+    // Send data to the server via AJAX (using jQuery for simplicity here)
+    $.ajax({
+            url: '/Assignation/Create', // Your controller action URL
+        type: 'POST',
+        data: JSON.stringify(assignationAddDto),
+        contentType: 'application/json',
+        success: function(response) {
+            // Update the grid with the new data (you can rebind the grid data or update the row)
+            // grid.refresh();
+            // Close the modal
+            $('#AssignationModal').modal('hide');
+            location.reload();
+        },
+        error: function(xhr, status, error) {
+            alert('An error occurred: ' + error);
+        }
+    });
+}
+
+</script>
+@* ___End_right Click Assign____ *@
+
+@* right Click outgoing *@
+<script>
+    function OutgoingModal(selectedRow) {
+        // Populate the form fields with row data
+        document.getElementById('ordidout').value = selectedRow.Id;
+        // document.getElementById('hotelIdout').value = rowData.HotelId;
+
+        // document.getElementById('CreatedTime').value = new Date(rowData.OrderDate).toISOString().split('T')[0]; // Format date for input
+
+        // Show the modal
+        // $('#AssignationModal').new modal('show');
+        var myModalout = new bootstrap.Modal(document.getElementById('OutgoingModal'));
+        myModalout.show();
+    }
+</script>
+<script>
+    function submitOutgoing() {
+        // Gather data from form
+        var outgoingAddDto = {
+            OrderId: $('#ordidout').val(),
+            HotelId: $('#hotelIdxx').val(),
+            No: $('#nox').val(),
+            ItemId: $('#itemIdx').val(),
+             CompanyName: $('#companyNamex').val(),
+            Price: $('#pricex').val(),
+            Remark: $('#remarkx').val(),
+            ReturnDate: $('#returnDatex').val(),
+            ApplicationUserId: $('#applicationUserIdx').val(),
+            // // OrderDate: document.getElementById('orderDate').value
+        };
+        console.log(outgoingAddDto);
+        // Send data to the server via AJAX (using jQuery for simplicity here)
+        $.ajax({
+            url: '@Url.Action("CreateModal", "Outgoing")', // Your controller action URL
+            type: 'POST',
+            data: JSON.stringify(outgoingAddDto),
+            contentType: 'application/json',
+            success: function (response) {
+                // Update the grid with the new data (you can rebind the grid data or update the row)
+                // grid.refresh();
+                // Close the modal
+                $('#OutgoingModal').modal('hide');
+                location.reload();
+            },
+            error: function (xhr, status, error) {
+                alert('An error occurred: ' + error);
+            }
+        });
+    }
+
+</script>
+@* ___End_right Click outgoing____ *@
+
+
+@* right Click Scheduale *@
+<script>
+    function SchedualeModal(Rows) {
+        // Populate the form fields with row data
+        document.getElementById('ordids').value = Rows.Id;
+        // document.getElementById('hotelIds').value = Rows.HotelId;
+        document.getElementById('applicationUserIds').value = Rows.ApplicationUserId;
+        // document.getElementById('hotelIdout').value = rowData.HotelId;
+
+        // document.getElementById('CreatedTime').value = new Date(rowData.OrderDate).toISOString().split('T')[0]; // Format date for input
+
+        // Show the modal
+        // $('#AssignationModal').new modal('show');
+        var myModalout = new bootstrap.Modal(document.getElementById('SchedualeModal'));
+        myModalout.show();
+    }
+</script>
+<script>
+    function submitScheduale() {
+        // Gather data from form
+        var Adddata = {
+            OrderId: $('#ordids').val(),
+            HotelId: $('#hotelIds').val(),
+            Reason: $('#reasons').val(),
+            ReturnDate: $('#returnDates').val(),
+            ApplicationUserId: $('#applicationUserIds').val(),
+        };
+        console.log(Adddata);
+        $.ajax({
+            url: '@Url.Action("CreateModal", "Scheduale")', // Your controller action URL
+            type: 'POST',
+            data: JSON.stringify(Adddata),
+            contentType: 'application/json',
+            success: function (response) {
+                // Update the grid with the new data (you can rebind the grid data or update the row)
+                // grid.refresh();
+                // Close the modal
+                $('#SchedualeModal').modal('hide');
+                location.reload();
+            },
+            error: function (xhr, status, error) {
+                alert('An error occurred: ' + error);
+            }
+        });
+        
+        // Send data to the server via AJAX (using jQuery for simplicity here)
+
+    }
+
+</script>
+@* ___End_right Click Scheduale____ *@
+
+
+
+

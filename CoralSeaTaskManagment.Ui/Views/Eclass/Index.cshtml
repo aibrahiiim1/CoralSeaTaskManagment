@@ -1,0 +1,28 @@
+﻿@using CoralSeaTaskManagment.Ui.Models.DTO
+@model IEnumerable<EclassDto>
+
+@{
+    ViewBag.PageTitle = "Class Management";
+    ViewBag.CardTitle = "Class";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<a class="btn btn-inverse-primary btn-fw" href="/Eclass/Create">Create</a>
+<br />
+<table class="table table-hover" width="100%">
+    <tr>
+        <td>Class Name</td>
+        <td>Hotel</td>
+        <td>Actions</td>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Name</td>
+            <td>@item.Hotels.Name</td>
+            <td>
+                <a class="btn btn-outline-warning btn-fw" href="/Eclass/Edit/@item.Id">Edit</a>
+                <a class="btn btn-outline-danger btn-fw" href="/Eclass/Delete/@item.Id">Delete</a>
+            </td>
+        </tr>
+    }
+</table>

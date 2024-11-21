@@ -1,0 +1,26 @@
+﻿@using CoralSeaTaskManagment.Ui.Models.DTO
+
+@model EcategoryDto
+@{
+    ViewBag.PageTitle = "category Management";
+    ViewBag.CardTitle = "Create category";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<div className="home-container">
+    <form asp-action="DeleteCat" method="post">
+        <input hidden asp-for="Id" />
+        <div class="mp-3">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" disabled class="form-control" />
+            <span asp-validation-for="Name"  class="text-danger"></span>
+        </div>
+        <div class="mp-3">
+            <button type="submit" class="btn btn-primary">Delete</button>
+            <a asp-action="Index" asp-controller="Ecategory" class="btn btn-warning">Back</a>
+        </div>
+    </form>
+</div>
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }
+

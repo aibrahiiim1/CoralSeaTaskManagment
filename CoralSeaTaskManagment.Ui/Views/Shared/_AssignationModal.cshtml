@@ -1,0 +1,49 @@
+﻿@using CoralSeaTaskManagment.Ui.Models.DTO
+@model AssignationDto
+<!-- Modal for editing -->
+<div class="modal fade" id="AssignationModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Assign Section</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form name="AssignationModalForm" id="editForm">
+                    <input name="id" id="id" />
+@*                     <input name="hotelId" id="hotelId" /> *@
+                    <div class="form-group">
+                        <label asp-for="AssignId"></label>
+                        <select id="AssignId" asp-for="AssignId" class="form-control"
+                                asp-items=@(new SelectList(ViewBag.assignlist,"Id","Name"))>
+                            <option disabled selected>-- SelectSection -- </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="TechName"></label>
+                        <input id="TechName" asp-for="TechName" class="form-control" />
+                        <span asp-validation-for="TechName" class="text-danger"></span>
+                    </div>
+@*                     <div class="form-group">
+                        <label for="departmentName">Department Name</label>
+                        <input type="text" class="form-control" id="name" name="Name" />
+                    </div> *@
+@*                     <div class="form-group">
+                        <label for="departmentNameAr">Department xxArabicxx</label>
+                        <input type="text" class="form-control" id="nameAr" name="NameAr" />
+                    </div> *@
+                    <div class="form-group">
+                        <label for="hotelSelect">Hotel</label>
+                        <select class="form-control" id="hotelId" name="hotelId" asp-items="@(new SelectList(ViewBag.hotellist,"Id","Name"))">
+                            <option value="">Select Hotel</option>
+
+                        </select>
+                    </div>
+                    <button type="button" onclick="submitForm()" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

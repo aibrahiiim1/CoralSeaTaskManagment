@@ -1,0 +1,32 @@
+﻿@using CoralSeaTaskManagment.Ui.Models.DTO
+@model AssignationDto
+@{
+    ViewBag.PageTitle = "Edit";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<div className="home-container">
+    <form asp-action="Edit" method="post">
+        <div>
+            <input hidden asp-for="Id" />
+            <input hidden asp-for="HotelId" />
+            <input hidden asp-for="OrderId" />
+@*             <input hidden asp-for="AssignId" />
+ *@        </div>
+        <div class="mp-3">
+            <label asp-for="AssignId"></label>
+            <select asp-for="AssignId" class="form-control"
+                    asp-items=@(new SelectList(ViewBag.assignlist,"Id","Name"))>
+                <option disabled selected>-- SelectSection -- </option>
+            </select>
+        </div>
+        <div class="mp-3">
+            <label asp-for="TechName"></label>
+            <input asp-for="TechName" class="form-control" />
+            <span asp-validation-for="TechName" class="text-danger"></span>
+        </div>
+        <div class="mp-3">
+            <button type="submit" class="btn btn-primary">Edit</button>
+            <a onclick="window.history.back();" class="btn btn-warning">Back</a>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,154 @@
+﻿@{
+    ViewBag.PageTitle = "Guest Orders";
+    ViewBag.CardTitle = "Guest";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    List<object> toolbarItems = new List<object>();
+    toolbarItems.Add(new { text = "Add", tooltipText = "Add", id = "Add" });
+    toolbarItems.Add(new { text = "Edit", tooltipText = "Edit", id = "Edit" });
+    toolbarItems.Add(new { text = "Delete", tooltipText = "Delete", id = "Delete" });
+    toolbarItems.Add(new { text = "Move", tooltipText = "Move", id = "Move" });
+    toolbarItems.Add(new { text = "Search", align = "Right" });
+    toolbarItems.Add(new { text = "ExcelExport", id = "excelexport" });
+    toolbarItems.Add(new { text = "Print" });
+
+}
+
+
+
+@* <button id="Editeq" class="btn btn-success" type="button" onclick="Editeq">Edit</button>
+<button id="Deleteeq" class="btn btn-danger" type="button" onclick="Deleteeq">Delete</button>
+<button id="Moveeq" class="btn btn-warning" type="button" onclick="Moveeq">Move</button> *@
+
+<ejs-grid id="Grid" dataSource="@ViewBag.data" allowExcelExport="true" showColumnChooser='true' allowSorting="true"
+          allowFiltering="true" allowPaging="true "
+          toolbarClick="toolbarClick" height="500"
+          gridLines="Both" allowSelection="true" enableHover="true" toolbar=toolbarItems toolbar="@(new List<string>() { "Search"})">
+    <e-grid-selectionsettings checkboxMode="ResetOnRowClick" type="Multiple" persistSelection="true"></e-grid-selectionsettings>
+    <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" newRowPosition="Top"></e-grid-editSettings>
+    <e-grid-filtersettings type="CheckBox"></e-grid-filtersettings>
+    <e-grid-pagesettings pageCount="5"></e-grid-pagesettings>
+
+    <e-grid-columns>
+        @* <e-grid-column type="checkbox" headerText="checkbox" width="70"></e-grid-column> *@
+        <e-grid-column type="checkbox" width="10" visible="false"></e-grid-column>
+        <e-grid-column field="Id" isPrimaryKey="true" headerText="ID" textAlign="Left"></e-grid-column>
+        <e-grid-column field="CreatedTime" headerText="CreatedTime" textAlign="Left" width="150" format="d/M/y H:mm"></e-grid-column>
+        <e-grid-column field="OtypeId" headerText="Order Type" textAlign="Left"></e-grid-column>
+        <e-grid-column field="glocationId" headerText="Location"></e-grid-column>
+        <e-grid-column field="DepartmentId" headerText="To"></e-grid-column>
+        <e-grid-column field="GitemId" headerText="Item" width="150"></e-grid-column>
+        <e-grid-column field="GroomsId" headerText="Room" width="150"></e-grid-column>
+        <e-grid-column field="OstatusId" headerText="Status"></e-grid-column>
+        <e-grid-column field="HotelId" headerText="Hotel"></e-grid-column>
+        <e-grid-column field="GdepartmentFId" headerText="From"></e-grid-column>
+        <e-grid-column field="AssignFlag" headerText="Assign"></e-grid-column>
+        <e-grid-column field="ApplicationUserId" headerText="User"></e-grid-column>
+    </e-grid-columns>
+</ejs-grid>
+@Html.Partial("_SampleModal")
+
+
+
+@* <script>
+    document.getElementById('Editeq').onclick = () => {
+
+        var gridInstance = document.getElementById("Grid").ej2_instances[0];
+        var selectedrecords = gridInstance.getSelectedRecords();
+        console.log('selectedrecords:', selectedrecords);
+        console.log('ID:', selectedrecords[0]['Id']);
+        $('#id').val(selectedrecords[0]['Id']);
+        window.location.href = '/Admin/Item/Edit/' + selectedrecords[0]['Id'];
+    };
+</script>
+<script>
+    document.getElementById('Deleteeq').onclick = () => {
+
+        var gridInstance = document.getElementById("Grid").ej2_instances[0];
+        var selectedrecords = gridInstance.getSelectedRecords();
+        console.log('selectedrecords:', selectedrecords);
+        console.log('ID:', selectedrecords[0]['Id']);
+        $('#id').val(selectedrecords[0]['Id']);
+        window.location.href = '/Admin/Item/Delete/' + selectedrecords[0]['Id'];
+    };
+</script>   *@
+<script>
+    function toolbarClick(args) {
+        // Initialize the grid instance
+        var grid = document.getElementById('Grid').ej2_instances[0];
+        if (args.item.id === 'Add') {
+            // Get the selected row data
+            var selectedRow = grid.getSelectedRecords()[0];
+            // Open modal with the row data
+            OutgoingModal(selectedRow);
+        }
+        if (args.item.id === "Edit") {
+            var gridInstance = document.getElementById("Grid").ej2_instances[0];
+            var selectedrecords = gridInstance.getSelectedRecords();
+            console.log('selectedrecords:', selectedrecords);
+            console.log('ID:', selectedrecords[0]['Id']);
+            $('#id').val(selectedrecords[0]['Id']);
+            window.location.href = '/Gorder/Edit/' + selectedrecords[0]['Id'];
+        }
+        if (args.item.id === "Delete") {
+            var gridInstance = document.getElementById("Grid").ej2_instances[0];
+            var selectedrecords = gridInstance.getSelectedRecords();
+            console.log('selectedrecords:', selectedrecords);
+            console.log('ID:', selectedrecords[0]['Id']);
+            $('#id').val(selectedrecords[0]['Id']);
+            window.location.href = '/Gorder/Delete/' + selectedrecords[0]['Id'];
+        }
+        if (args.item.id === "excelexport") {
+            var gridObj = document.getElementById("Grid").ej2_instances[0];
+            gridObj.excelExport();
+
+        }
+
+    }
+</script>
+
+
+@* right Click outgoing *@
+<script>
+    function OutgoingModal(selectedRow) {
+        // Populate the form fields with row data
+        document.getElementById('ordidout').value = selectedRow.Id;
+        // document.getElementById('hotelIdout').value = rowData.HotelId;
+
+        // document.getElementById('CreatedTime').value = new Date(rowData.OrderDate).toISOString().split('T')[0]; // Format date for input
+
+        // Show the modal
+        // $('#AssignationModal').new modal('show');
+        var myModalout = new bootstrap.Modal(document.getElementById('staticBackdrop1'));
+        myModalout.show();
+    }
+</script>
+<script>
+    function submitFormOutgoing() {
+        // Gather data from form
+        var outgoingAddDto = {
+            OrderId: $('#ordidout').val(),
+            No: $('#no').val(),
+            ItemId: $('#itemId').val(),
+            CompanyName: $('#companyName').val()
+        };
+        console.log(outgoingAddDto);
+        // Send data to the server via AJAX (using jQuery for simplicity here)
+        $.ajax({
+            url: '@Url.Action("CreateModal", "Outgoing")', // URL to controller action
+            type: 'POST',
+            data: JSON.stringify(outgoingAddDto),
+            contentType: 'application/json',
+            success: function (response) {
+                // Optionally, update the grid to reflect the new status
+
+                // Close the modal
+                closeModal();
+            },
+            error: function (error) {
+                console.error("Error updating order status", error);
+            }
+        });
+    }
+
+</script>
+@* ___End_right Click outgoing____ *@

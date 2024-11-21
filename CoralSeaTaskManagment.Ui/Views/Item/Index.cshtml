@@ -1,0 +1,227 @@
+﻿@{
+    ViewBag.PageTitle = "Item Management";
+    ViewBag.CardTitle = "Item";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    List<object> toolbarItems = new List<object>();
+    toolbarItems.Add(new { text = "Add", tooltipText = "Add", id = "Add" });
+    toolbarItems.Add(new { text = "Edit", tooltipText = "Edit", id = "Edit" });
+    toolbarItems.Add(new { text = "Delete", tooltipText = "Delete", id = "Delete" });
+    toolbarItems.Add(new { text = "Move", tooltipText = "Move", id = "Move" });
+    toolbarItems.Add(new { text = "Search", align = "Right" });
+    toolbarItems.Add(new { text = "ExcelExport", id = "excelexport" });
+    toolbarItems.Add(new { text = "Print" });
+    List<object> ContextMenuitems = new List<object>();
+    ContextMenuitems.Add(new { text = "Edit Item", target = ".e-content", id = "edit" });
+    ContextMenuitems.Add(new { text = "Edit Item New", target = ".e-content", id = "editxx" });
+}
+
+
+
+@* <button id="Editeq" class="btn btn-success" type="button" onclick="Editeq">Edit</button>
+<button id="Deleteeq" class="btn btn-danger" type="button" onclick="Deleteeq">Delete</button>
+<button id="Moveeq" class="btn btn-warning" type="button" onclick="Moveeq">Move</button> *@
+
+<ejs-grid id="Grid" dataSource="@ViewBag.data" allowExcelExport="true" showColumnChooser='true' allowSorting="true"
+          allowFiltering="true" allowPaging="true " contextMenuItems="ContextMenuitems" contextMenuClick="contextMenuClick"
+          toolbarClick="toolbarClick" height="500"
+          gridLines="Both" allowSelection="true" enableHover="true" toolbar=toolbarItems toolbar="@(new List<string>() { "Search"})">
+    <e-grid-selectionsettings checkboxMode="ResetOnRowClick" type="Multiple" persistSelection="true"></e-grid-selectionsettings>
+    <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" newRowPosition="Top"></e-grid-editSettings>
+    <e-grid-filtersettings type="CheckBox"></e-grid-filtersettings>
+    <e-grid-pagesettings pageCount="5"></e-grid-pagesettings>
+
+    <e-grid-columns>
+        @* <e-grid-column type="checkbox" headerText="checkbox" width="70"></e-grid-column> *@
+        <e-grid-column type="checkbox" width="50" visible="false"></e-grid-column>
+        <e-grid-column field="Id" isPrimaryKey="true" headerText="ID" textAlign="Left" width="120"></e-grid-column>
+        <e-grid-column field="Code" headerText="Code" textAlign="Left" width="120"></e-grid-column>
+        <e-grid-column field="Name" headerText="Name" textAlign="Left" width="120"></e-grid-column>
+        <e-grid-column field="Namear" headerText="Namear" width="150"></e-grid-column>
+        <e-grid-column field="Locations.Name" headerText="Location" width="150"></e-grid-column>
+        <e-grid-column field="Departments.Name" headerText="Department" width="150"></e-grid-column>
+        <e-grid-column field="Agent" headerText="Agent" width="150"></e-grid-column>
+        <e-grid-column field="Eclasses.Name" headerText="Class" textAlign="Left" width="120"></e-grid-column>
+        <e-grid-column field="Efamilies.Name" headerText="Family" width="150"></e-grid-column>
+        <e-grid-column field="Hotels.Name" headerText="Hotel" width="150"></e-grid-column>
+        <e-grid-column field="Manufacturer" headerText="Manufacturer" width="150"></e-grid-column>
+        <e-grid-column field="Ecategories.Name" headerText="Category" width="150"></e-grid-column>
+    </e-grid-columns>
+</ejs-grid>
+<div id="modalContainer"></div>
+<div id='container' style="height:1000px;">
+    <ejs-dialog id='dialog' isModal="true" showCloseIcon visible="false" width="500px"
+                 content="This is a modal dialog" target="#container" 
+                footerTemplate="<input id='inVal' class='e-input' type='ext' placeholder='Enter your message here!'/>
+<button  onclick='redirectToAction' class='e-control e-btn e-primary' data-ripple='true'>Send</button>">
+        <e-content-template>
+            <form id="ItemForm" style="margin-left:20px;margin-right:20px">
+                <div class='form-group'>
+                    <label for='email'>Email:</label><input type='email' class='form-control' id='email'>
+                </div><div class='form-group'>
+                </div><div class='form-group'>
+                    <label for='comment'>Comments:</label><textarea style='resize: none;' class='form-control' rows='5' id='comment'></textarea>
+                </div>
+            </form></e-content-template>
+    </ejs-dialog>
+</div>
+
+@* <script>
+    document.getElementById('Editeq').onclick = () => {
+
+        var gridInstance = document.getElementById("Grid").ej2_instances[0];
+        var selectedrecords = gridInstance.getSelectedRecords();
+        console.log('selectedrecords:', selectedrecords);
+        console.log('ID:', selectedrecords[0]['Id']);
+        $('#id').val(selectedrecords[0]['Id']);
+        window.location.href = '/Admin/Item/Edit/' + selectedrecords[0]['Id'];
+    };
+</script>
+<script>
+    document.getElementById('Deleteeq').onclick = () => {
+
+        var gridInstance = document.getElementById("Grid").ej2_instances[0];
+        var selectedrecords = gridInstance.getSelectedRecords();
+        console.log('selectedrecords:', selectedrecords);
+        console.log('ID:', selectedrecords[0]['Id']);
+        $('#id').val(selectedrecords[0]['Id']);
+        window.location.href = '/Admin/Item/Delete/' + selectedrecords[0]['Id'];
+    };
+</script>   *@
+
+<script>
+    function contextMenuClick(args) {
+        var grid = document.getElementById("Grid").ej2_instances[0];
+        var selectedRow = grid.getSelectedRecords()[0];  // Get selected row data
+        if (!selectedRow) return;
+
+            switch (args.item.id) {
+                case 'edit':
+                    // // Redirect to another view with parameters
+                    // window.location.href = '/Item/Edit/' + selectedRow.Id;
+                                // Make AJAX request to load the modal content from the partial view
+            $.ajax({
+                url: '@Url.Action("EditForm", "Item")',  // URL to your controller action
+                type: 'GET',
+                data: { id: selectedRow.Id },  // Pass parameters like OrderID to load specific data
+                success: function (response) {
+                    $('#modalContainer').html(response);  // Inject the modal content into the container
+                    $('#editModal').modal('show'); 
+                    // Show the modal
+              
+                },
+                error: function (xhr, status, error) {
+                    alert('Error loading modal: ' + error);
+                }
+            });
+                    break;
+                case 'editxxx':
+                openModal('editxxx');
+                    break;
+                case 'delete':
+                    // Delete logic here (e.g., send AJAX request to delete)
+                    alert('Delete logic for OrderID ' + selectedRow.Id);
+                    break;
+            }
+        // if (args.item.id === 'createxxx') {
+        //     window.location.href = '/Item/Edit/'+selectedRow.Id
+        // }
+    }
+</script>
+<script>
+    function toolbarClick(args) {
+        if (args.item.id === 'Add') {
+            window.location.href = '/Item/Create/';
+        }
+        if (args.item.id === "Edit") {
+            var gridInstance = document.getElementById("Grid").ej2_instances[0];
+            var selectedrecords = gridInstance.getSelectedRecords();
+            console.log('selectedrecords:', selectedrecords);
+            console.log('ID:', selectedrecords[0]['Id']);
+            $('#id').val(selectedrecords[0]['Id']);
+            window.location.href = '/Item/Edit/' + selectedrecords[0]['Id'];
+        }
+        if (args.item.id === "Delete") {
+            var gridInstance = document.getElementById("Grid").ej2_instances[0];
+            var selectedrecords = gridInstance.getSelectedRecords();
+            console.log('selectedrecords:', selectedrecords);
+            console.log('ID:', selectedrecords[0]['Id']);
+            $('#id').val(selectedrecords[0]['Id']);
+            window.location.href = '/Item/Delete/' + selectedrecords[0]['Id'];
+        }
+        if (args.item.id === "excelexport") {
+            var gridObj = document.getElementById("Grid").ej2_instances[0];
+            gridObj.excelExport();
+
+        }
+
+    }
+</script>
+<script>        
+function populateEditForm(args) {
+            $('#Name').val(Name);
+            // Add more fields as needed
+        }
+
+            $(document).ready(function () {
+                $('#saveChanges').click(function () {
+                    var formData = $('#editForm').serialize();
+                    $.ajax({
+                        url: '/YourController/Edit',
+                        type: 'POST',
+                        data: {
+                        Id: $('#Name').val(),
+                            StatusFlag: flag,
+                            Note: NoteText,
+                            __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
+                        }
+                     
+                        success: function (response) {
+                            // Handle success response
+                            $('#editModal').modal('hide');
+                            // Optionally, refresh the page or update the UI
+                        },
+                        error: function (error) {
+                            // Handle error response
+                            console.log(error);
+                        }
+                    });
+                });
+            });
+</script>    
+ <script>
+    window.onload = function () {
+        document.getElementById('editxx').onclick = function () {
+            var dialog = document.getElementById("dialog").ej2_instances[0];
+            dialog.show();
+        }
+    }
+    function redirectToAction() {
+        // Redirect to a specific action in the Home controller
+        window.location.href = '@Url.Action("EditFormPost", "Item")';
+    }
+</script>
+<script>
+    // Handle form submission via JavaScript
+        document.getElementById('ItemForm').addEventListener('submit', function (event) {
+            event.preventDefault();  // Prevent the default form submission
+
+        // Submit the form data via fetch to the server
+        fetch(form.action, {
+            method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+            },
+        body: new URLSearchParams(data)  // Convert the data object to URL-encoded format
+        })
+        .then(response => response.json())  // Handle response if needed
+        .then(data => {
+            // If successful, you can close the modal and redirect or perform further actions
+                $('#dialog').modal('hide');  // Close the modal using Bootstrap's jQuery (you can omit jQuery if you prefer pure JS)
+        alert('Item saved successfully!');
+                window.location.href = '@Url.Action("EditFormPost", "Item")'; // Redirect after successful submit
+        })
+        .catch(error => {
+            alert('Error: ' + error);
+        });
+    });
+</script>

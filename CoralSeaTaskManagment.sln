@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35122.118
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoralSeaTaskManagment.Api", "CoralSeaTaskManagment.Api\CoralSeaTaskManagment.Api.csproj", "{AD629A3D-884A-42F9-8D8A-80D51A214D81}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoralSeaTaskManagment.Model", "CoralSeaTaskManagment.Model\CoralSeaTaskManagment.Model.csproj", "{E0BB944B-BCC3-4179-A81A-EECE816FA4E4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoralSeaTaskManagment.Data", "CoralSeaTaskManagment.Data\CoralSeaTaskManagment.Data.csproj", "{755A800B-9D16-4E3B-B504-FE2E2ACF4BD0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoralSeaTaskManagment.Ui", "CoralSeaTaskManagment.Ui\CoralSeaTaskManagment.Ui.csproj", "{F3D86D35-533C-49C6-9E67-51600394D805}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AD629A3D-884A-42F9-8D8A-80D51A214D81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD629A3D-884A-42F9-8D8A-80D51A214D81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD629A3D-884A-42F9-8D8A-80D51A214D81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD629A3D-884A-42F9-8D8A-80D51A214D81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0BB944B-BCC3-4179-A81A-EECE816FA4E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0BB944B-BCC3-4179-A81A-EECE816FA4E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0BB944B-BCC3-4179-A81A-EECE816FA4E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0BB944B-BCC3-4179-A81A-EECE816FA4E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{755A800B-9D16-4E3B-B504-FE2E2ACF4BD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{755A800B-9D16-4E3B-B504-FE2E2ACF4BD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{755A800B-9D16-4E3B-B504-FE2E2ACF4BD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{755A800B-9D16-4E3B-B504-FE2E2ACF4BD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3D86D35-533C-49C6-9E67-51600394D805}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3D86D35-533C-49C6-9E67-51600394D805}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3D86D35-533C-49C6-9E67-51600394D805}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3D86D35-533C-49C6-9E67-51600394D805}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {65E405FA-20E9-467F-9911-835C553D515D}
+	EndGlobalSection
+EndGlobal

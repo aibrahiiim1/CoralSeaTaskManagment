@@ -1,0 +1,57 @@
+using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
+
+[Route("api/[controller]")]
+[ApiController]
+public class HotelsController : ControllerBase
+{
+    private readonly ApplicationDbContext _context; // Your DB context
+    private readonly IMapper _mapper;
+
+    public HotelsController(ApplicationDbContext context, IMapper mapper)
+    {
+        _context = context;
+        _mapper = mapper;
+    }
+
+    // PUT api/hotels/{id}
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateHotel(int id, HotelDTO hotelDTO)
+    {
+        // Check if the hotel exists
+        var hotel = await _context.Hotels.FindAsync(id);
+        if (hotel == null)
+        {
+            return NotFound(); // Hotel not found
+        }
+
+        // Map the incoming DTO to the Hotel entity
+        _mapper.Map(hotelDTO, hotel);  // This updates the hotel entity with DTO data
+
+        try
+        {
+            // Save the changes to the database
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!HotelExists(id))
+            {
+                return NotFound();
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        return NoContent(); // Return HTTP 204 No Content
+    }
+
+    private bool HotelExists(int id)
+    {
+        return _context.Hotels.Any(e => e.Id == id);
+    }
+}

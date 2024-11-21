@@ -1,0 +1,36 @@
+﻿@using CoralSeaTaskManagment.Ui.Models.DTO
+
+@model IEnumerable<HotelDto>
+
+@{
+    ViewBag.PageTitle = "Hotel Management";
+    ViewBag.CardTitle = "Hotel";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<head>
+    <link rel="stylesheet" href="https://cdn.syncfusion.com/ej2/26.1.35/fluent.css" />
+</head>
+
+<br />
+<a class="btn btn-inverse-primary btn-fw" href="/Hotel/Create">Create</a>
+<table class="table table-hover" width="100%">
+    <thead>
+        <tr>
+            <th scope="col">HotelName</th>
+            <th scope="col">Actions</th>
+
+        </tr>
+    </thead>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Name</td>
+            <td>
+                <a class="btn btn-outline-warning btn-fw" href="/Hotel/Edit/@item.Id">Edit</a>
+                <a type="button" class="btn btn-outline-danger btn-fw" href="/Hotel/Delete/@item.Id">Delete</a>
+            </td>
+        </tr>
+    }
+</table>
+
+

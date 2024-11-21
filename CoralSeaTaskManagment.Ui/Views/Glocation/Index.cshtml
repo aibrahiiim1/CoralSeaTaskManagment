@@ -1,0 +1,31 @@
+﻿@using CoralSeaTaskManagment.Ui.Models.DTO
+
+@model IEnumerable<GlocationDto>
+
+@{
+    ViewBag.PageTitle = "Room Location Management ";
+    ViewBag.CardTitle = "Rooms";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<a class="btn btn-inverse-primary btn-fw" href="/Glocation/Create">Create</a>
+<br />
+<table class="table table-hover" width="100%">
+    <tr>
+        <td>Room Location</td>
+        <td>Room Location Arabic</td>
+        <td>Hotel Name</td>
+        <td>Action</td>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Name</td>
+            <td>@item.NameAr</td>
+            <td>@item.Hotels.Name</td>
+            <td>
+                <a class="btn btn-outline-warning btn-fw" href="/Glocation/Edit/@item.Id">Edit</a>
+                <a class="btn btn-outline-danger btn-fw" href="/Glocation/Delete/@item.Id">Delete</a>
+            </td>
+        </tr>
+    }
+</table>

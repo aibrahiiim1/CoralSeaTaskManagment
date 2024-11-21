@@ -1,0 +1,85 @@
+﻿@using CoralSeaTaskManagment.Ui.Models.DTO
+
+@model OutgoingAddDto
+@{
+    ViewBag.PageTitle = "Outgoing Management";
+    ViewBag.CardTitle = "Create Outgoing";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<div className="home-container">
+    <form asp-action="Create" method="post">
+        <div class="mp-3">
+            <label asp-for="OrderId"></label>
+            <input asp-for="OrderId" class="form-control" />
+            <span asp-validation-for="OrderId" class="text-danger"></span>
+        </div>        
+        <div class="mp-3">
+            <label asp-for="ItemId"></label>
+            <input asp-for="ItemId" class="form-control" />
+            <span asp-validation-for="ItemId" class="text-danger"></span>
+        </div>
+        <div class="mp-3">
+            <label asp-for="No"></label>
+            <input asp-for="No" class="form-control" />
+            <span asp-validation-for="No" class="text-danger"></span>
+        </div>
+        <div class="mp-3">
+            <label asp-for="CompanyName"></label>
+            <input asp-for="CompanyName" class="form-control" />
+            <span asp-validation-for="CompanyName" class="text-danger"></span>
+        </div>
+        <div class="mp-3">
+            <label asp-for="Price"></label>
+            <input asp-for="Price" class="form-control" />
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+        <div class="mp-3">
+            <label asp-for="Remark"></label>
+            <input asp-for="Remark" class="form-control" />
+            <span asp-validation-for="Remark" class="text-danger"></span>
+        </div>
+        <div class="mp-3">
+            <label asp-for="ReturnDate"></label>
+            <input id="txtDate" asp-for="ReturnDate" class="form-control" type="date" />
+            <span asp-validation-for="ReturnDate" class="text-danger"></span>
+        </div>        
+        <div class="mp-3">
+            <label asp-for="HotelId"></label>
+            <select asp-for="HotelId" class="form-control"
+                    asp-items="@(new SelectList(ViewBag.hotels,"Id","Name"))">
+                <option disabled selected>-- Select Hotel -- </option>
+            </select>
+            <span asp-validation-for="HotelId" class="text-danger"></span>
+        </div>
+        <div class="mp-3">
+            <label asp-for="ApplicationUserId"></label>
+            <input asp-for="ApplicationUserId" class="form-control" />
+            <span asp-validation-for="ApplicationUserId" class="text-danger"></span>
+        </div>
+        <div class="mp-3">
+            <button type="submit" class="btn btn-primary">Create</button>
+            <a asp-action="Index" asp-controller="Outgoing" class="btn btn-warning">Back</a>
+        </div>
+    </form>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(function(){
+              var dtToday = new Date();
+
+              var month = dtToday.getMonth() + 1;
+              var day = dtToday.getDate();
+              var year = dtToday.getFullYear();
+              if(month < 10)
+                  month = '0' + month.toString();
+              if(day < 10)
+                  day = '0' + day.toString();
+
+              var minDate= year + '-' + month + '-' + day;
+
+              $('#txtDate').attr('min', minDate);
+              });</script>
+}
+
+
