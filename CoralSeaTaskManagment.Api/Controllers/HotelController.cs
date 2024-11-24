@@ -3,6 +3,7 @@ using CoralSeaTaskManagment.Api.Models.DTO;
 using CoralSeaTaskManagment.Data.Data;
 using CoralSeaTaskManagment.Model.Models.Domain;
 using CoralSeaTaskManagment.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -24,6 +25,7 @@ namespace CoralSeaTaskManagment.Api.Controllers
         }
         // Get All
         // Get: https://localhost:portnumber/api/hotels
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Get()
         {

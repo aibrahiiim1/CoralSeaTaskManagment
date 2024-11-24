@@ -1,7 +1,10 @@
 ﻿using CoralSeaTaskManagment.Model.Models.Domain;
+using CoralSeaTaskManagment.Services;
+using CoralSeaTaskManagment.Ui.Helper;
 using CoralSeaTaskManagment.Ui.Models;
 using CoralSeaTaskManagment.Ui.Models.DTO;
 using CoralSeaTaskManagment.Ui.Models.VM;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net.Http;
@@ -9,52 +12,63 @@ using System.Text;
 
 namespace CoralSeaTaskManagment.Ui.Controllers
 {
+    [Authorize]
     public class OrderController : Controller
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        public OrderController(IHttpClientFactory httpClientFactory)
+        private readonly APIService _aPIService;
+
+        public OrderController(IHttpClientFactory httpClientFactory, APIService aPIService)
         {
             this._httpClientFactory = httpClientFactory;
+            _aPIService = aPIService;
         }
         public async Task<IActionResult> Index()
         {
+            var userId = Identity.FullName;
+            var depId= Identity.DepId;
+            var hotelId= Identity.HotelId;
             List<OrderDto> orderList = new List<OrderDto>();
             try
             {
-                var client = _httpClientFactory.CreateClient();
-                var response = await client.GetAsync(ApiRequests.OrderApi);
-                response.EnsureSuccessStatusCode();
-                orderList.AddRange(await response.Content.ReadFromJsonAsync<IEnumerable<OrderDto>>());
-                var orderVM=orderList.ToList().Select(x => new OrderVM
+                var Requset = await _aPIService.GetAsync(ApiRequests.OrderApi);
+                if (Requset.IsSuccessStatusCode)
                 {
-                    Id = x.Id,
-                    ApplicationUserId = x.ApplicationUserId,
-                    AssignFlag=x.AssignFlag.ToString(),
-                    Comment = x.Comment,
-                    CreatedTime = x.CreatedTime,
-                    DepartmentFId = x.DepartmentFrom.Name,
-                    DepartmentId = x.Departments.Name,
-                    HotelId = x.Hotels.Name,
-                    ItemId = x.Items.Name,
-                    LocationId = x.Locations.Name,
-                    OstatusId = x.OstatusId.ToString(),
-                    OtypeId= x.Otypes.Name,
-                    PeriorityId = x.Periorities.Name,
-                    Pic= x.Pic
-                }).ToList();
-                ViewBag.data = orderVM;
+                    orderList.AddRange(await Requset.Content.ReadFromJsonAsync<IEnumerable<OrderDto>>());
+                    var orderVM = orderList.ToList().Select(x => new OrderVM
+                    {
+                        Id = x.Id,
+                        ApplicationUserId = x.ApplicationUserId,
+                        AssignFlag = x.AssignFlag.ToString(),
+                        Comment = x.Comment,
+                        CreatedTime = x.CreatedTime,
+                        DepartmentFId = x.DepartmentFrom.Name,
+                        DepartmentId = x.Departments.Name,
+                        HotelId = x.Hotels.Name,
+                        ItemId = x.Items.Name,
+                        LocationId = x.Locations.Name,
+                        OstatusId = x.OstatusId.ToString(),
+                        OtypeId = x.Otypes.Name,
+                        PeriorityId = x.Periorities.Name,
+                        Pic = x.Pic
+                    }).ToList();
+                    ViewBag.data = orderVM;
+                }
+                var RequsetAssign = await _aPIService.GetAsync(ApiRequests.AssignApi);
+                if (RequsetAssign.IsSuccessStatusCode)
+                {
+                    var json = await RequsetAssign.Content.ReadAsStringAsync();
+                    var assigns = JsonConvert.DeserializeObject<List<AssignDto>>(json);
+                    ViewBag.assignlist = assigns;
+                }
 
-                var responseAssign = await client.GetAsync(ApiRequests.AssignApi);
-                responseAssign.EnsureSuccessStatusCode();
-                var json = await responseAssign.Content.ReadAsStringAsync();
-                var assigns = JsonConvert.DeserializeObject<List<AssignDto>>(json);
-                ViewBag.assignlist = assigns;
-
-                var responsehotels = await client.GetAsync(ApiRequests.HotelApi);
-                responsehotels.EnsureSuccessStatusCode();
-                var jsonhotels = await responsehotels.Content.ReadAsStringAsync();
-                var hotels = JsonConvert.DeserializeObject<List<HotelDto>>(jsonhotels);
-                ViewBag.hotellist = hotels;
+                var RequsetHotel = await _aPIService.GetAsync(ApiRequests.HotelApi);
+                if (RequsetHotel.IsSuccessStatusCode)
+                {
+                    var jsonhotels = await RequsetHotel.Content.ReadAsStringAsync();
+                    var hotels = JsonConvert.DeserializeObject<List<HotelDto>>(jsonhotels);
+                    ViewBag.hotellist = hotels;
+                } 
             }
             catch (Exception ex)
             {
@@ -131,6 +145,7 @@ namespace CoralSeaTaskManagment.Ui.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(OrderAddDto orderAddDto)
         {
+            var x = ViewBag.data;
             var client = _httpClientFactory.CreateClient();
             var httpRequestMessage = new HttpRequestMessage()
             {

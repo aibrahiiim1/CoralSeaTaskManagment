@@ -4,6 +4,7 @@ using CoralSeaTaskManagment.Data.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CoralSeaTaskManagment.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241121151942_firstNameandlastName")]
+    partial class firstNameandlastName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,7 +56,7 @@ namespace CoralSeaTaskManagment.Data.Migrations
 
                     b.HasIndex("HotelId");
 
-                    b.ToTable("Assigns", (string)null);
+                    b.ToTable("Assigns");
                 });
 
             modelBuilder.Entity("CoralSeaTaskManagment.Model.Models.Domain.Assignation", b =>
@@ -90,7 +93,7 @@ namespace CoralSeaTaskManagment.Data.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("Assignations", (string)null);
+                    b.ToTable("Assignations");
                 });
 
             modelBuilder.Entity("CoralSeaTaskManagment.Model.Models.Domain.Department", b =>
@@ -119,7 +122,7 @@ namespace CoralSeaTaskManagment.Data.Migrations
 
                     b.HasIndex("HotelId");
 
-                    b.ToTable("Departments", (string)null);
+                    b.ToTable("Departments");
                 });
 
             modelBuilder.Entity("CoralSeaTaskManagment.Model.Models.Domain.Ecategory", b =>
@@ -144,7 +147,7 @@ namespace CoralSeaTaskManagment.Data.Migrations
 
                     b.HasIndex("HotelId");
 
-                    b.ToTable("Ecategories", (string)null);
+                    b.ToTable("Ecategories");
                 });
 
             modelBuilder.Entity("CoralSeaTaskManagment.Model.Models.Domain.Eclass", b =>
@@ -169,7 +172,7 @@ namespace CoralSeaTaskManagment.Data.Migrations
 
                     b.HasIndex("HotelId");
 
-                    b.ToTable("Eclasses", (string)null);
+                    b.ToTable("Eclasses");
                 });
 
             modelBuilder.Entity("CoralSeaTaskManagment.Model.Models.Domain.Efamily", b =>
@@ -194,7 +197,7 @@ namespace CoralSeaTaskManagment.Data.Migrations
 
                     b.HasIndex("HotelId");
 
-                    b.ToTable("Efamilies", (string)null);
+                    b.ToTable("Efamilies");
                 });
 
             modelBuilder.Entity("CoralSeaTaskManagment.Model.Models.Domain.Estatus", b =>
@@ -219,7 +222,7 @@ namespace CoralSeaTaskManagment.Data.Migrations
 
                     b.HasIndex("HotelId");
 
-                    b.ToTable("Estatuses", (string)null);
+                    b.ToTable("Estatuses");
                 });
 
             modelBuilder.Entity("CoralSeaTaskManagment.Model.Models.Domain.Gitem", b =>
@@ -258,7 +261,7 @@ namespace CoralSeaTaskManagment.Data.Migrations
 
                     b.HasIndex("HotelId");
 
-                    b.ToTable("Gitems", (string)null);
+                    b.ToTable("Gitems");
                 });
 
             modelBuilder.Entity("CoralSeaTaskManagment.Model.Models.Domain.Glocation", b =>
@@ -287,7 +290,7 @@ namespace CoralSeaTaskManagment.Data.Migrations
 
                     b.HasIndex("HotelId");
 
-                    b.ToTable("Glocations", (string)null);
+                    b.ToTable("Glocations");
                 });
 
             modelBuilder.Entity("CoralSeaTaskManagment.Model.Models.Domain.Gorder", b =>
@@ -351,7 +354,7 @@ namespace CoralSeaTaskManagment.Data.Migrations
 
                     b.HasIndex("OtypeId");
 
-                    b.ToTable("Gorders", (string)null);
+                    b.ToTable("Gorders");
                 });
 
             modelBuilder.Entity("CoralSeaTaskManagment.Model.Models.Domain.Grooms", b =>
@@ -379,7 +382,7 @@ namespace CoralSeaTaskManagment.Data.Migrations
 
                     b.HasIndex("HotelId");
 
-                    b.ToTable("Grooms", (string)null);
+                    b.ToTable("Grooms");
                 });
 
             modelBuilder.Entity("CoralSeaTaskManagment.Model.Models.Domain.Hotel", b =>
@@ -396,7 +399,7 @@ namespace CoralSeaTaskManagment.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Hotels", (string)null);
+                    b.ToTable("Hotels");
                 });
 
             modelBuilder.Entity("CoralSeaTaskManagment.Model.Models.Domain.Item", b =>
@@ -489,7 +492,7 @@ namespace CoralSeaTaskManagment.Data.Migrations
 
                     b.HasIndex("LocationId");
 
-                    b.ToTable("Items", (string)null);
+                    b.ToTable("Items");
                 });
 
             modelBuilder.Entity("CoralSeaTaskManagment.Model.Models.Domain.Location", b =>
@@ -523,7 +526,7 @@ namespace CoralSeaTaskManagment.Data.Migrations
 
                     b.HasIndex("HotelId");
 
-                    b.ToTable("Locations", (string)null);
+                    b.ToTable("Locations");
                 });
 
             modelBuilder.Entity("CoralSeaTaskManagment.Model.Models.Domain.Order", b =>
@@ -593,7 +596,7 @@ namespace CoralSeaTaskManagment.Data.Migrations
 
                     b.HasIndex("PeriorityId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("CoralSeaTaskManagment.Model.Models.Domain.Otype", b =>
@@ -621,7 +624,7 @@ namespace CoralSeaTaskManagment.Data.Migrations
 
                     b.HasIndex("HotelId");
 
-                    b.ToTable("Otypes", (string)null);
+                    b.ToTable("Otypes");
                 });
 
             modelBuilder.Entity("CoralSeaTaskManagment.Model.Models.Domain.Outgoing", b =>
@@ -671,7 +674,7 @@ namespace CoralSeaTaskManagment.Data.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("Outgoings", (string)null);
+                    b.ToTable("Outgoings");
                 });
 
             modelBuilder.Entity("CoralSeaTaskManagment.Model.Models.Domain.Periority", b =>
@@ -695,7 +698,7 @@ namespace CoralSeaTaskManagment.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Periorities", (string)null);
+                    b.ToTable("Periorities");
                 });
 
             modelBuilder.Entity("CoralSeaTaskManagment.Model.Models.Domain.RefreshToken", b =>
@@ -718,7 +721,7 @@ namespace CoralSeaTaskManagment.Data.Migrations
 
                     b.HasKey("Token");
 
-                    b.ToTable("RefreshTokens", (string)null);
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("CoralSeaTaskManagment.Model.Models.Domain.Scheduale", b =>
@@ -754,7 +757,7 @@ namespace CoralSeaTaskManagment.Data.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("Scheduales", (string)null);
+                    b.ToTable("Scheduales");
                 });
 
             modelBuilder.Entity("CoralSeaTaskManagment.Model.Models.Domain.Spart", b =>
@@ -802,7 +805,7 @@ namespace CoralSeaTaskManagment.Data.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("Sparts", (string)null);
+                    b.ToTable("Sparts");
                 });
 
             modelBuilder.Entity("CoralSeaTaskManagment.Model.Models.Domain.User", b =>
@@ -856,7 +859,7 @@ namespace CoralSeaTaskManagment.Data.Migrations
 
                     b.HasIndex("HotelId");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("CoralSeaTaskManagment.Model.Models.Domain.Assign", b =>

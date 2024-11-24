@@ -1,32 +1,33 @@
 ﻿using CoralSeaTaskManagment.Model.Models.Domain;
+using CoralSeaTaskManagment.Services;
 using CoralSeaTaskManagment.Ui.Models;
 using CoralSeaTaskManagment.Ui.Models.DTO;
-using CoralSeaTaskManagment.Ui.Models.VM;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Security.Claims;
 using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace CoralSeaTaskManagment.Ui.Controllers
 {
     public class AssignationController : Controller
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        public AssignationController(IHttpClientFactory httpClientFactory)
+        private readonly APIService _aPIService;
+
+        public AssignationController(IHttpClientFactory httpClientFactory, APIService aPIService)
         {
             this._httpClientFactory = httpClientFactory;
+            _aPIService = aPIService;
         }
         public async Task<IActionResult> Index()
         {
             List<AssignationDto> AssignationList = new List<AssignationDto>();
             try
             {
-                var client = _httpClientFactory.CreateClient();
-                var response = await client.GetAsync(ApiRequests.AssignationApi);
-                response.EnsureSuccessStatusCode();
-                AssignationList.AddRange(await response.Content.ReadFromJsonAsync<IEnumerable<AssignationDto>>());
+                var Requset = await _aPIService.GetAsync(ApiRequests.AssignationApi);
+                if (Requset.IsSuccessStatusCode)
+                {
+                    AssignationList.AddRange(await Requset.Content.ReadFromJsonAsync<IEnumerable<AssignationDto>>());
+                }
             }
             catch (Exception ex)
             {
@@ -37,83 +38,69 @@ namespace CoralSeaTaskManagment.Ui.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var client = _httpClientFactory.CreateClient();
-            var response = await client.GetAsync(ApiRequests.AssignApi);
-            response.EnsureSuccessStatusCode();
-            var json = await response.Content.ReadAsStringAsync();
-            var assigns = JsonConvert.DeserializeObject<List<AssignDto>>(json);
-            ViewBag.assignlist = assigns;
+            var Requset = await _aPIService.GetAsync(ApiRequests.AssignApi);
+            if (Requset.IsSuccessStatusCode)
+            {
+                var json = await Requset.Content.ReadAsStringAsync();
+                var assigns = JsonConvert.DeserializeObject<List<AssignDto>>(json);
+                ViewBag.assignlist = assigns;
+            }
             return View();
         }
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] AssignationAddDto assignationAddDto)
         {
-            var client = _httpClientFactory.CreateClient();
-            var httpRequestMessage = new HttpRequestMessage()
+            try
             {
-                Method = HttpMethod.Post,
-                RequestUri = new Uri(ApiRequests.AssignationCreate),
-                Content = new StringContent(System.Text.Json.JsonSerializer.Serialize(assignationAddDto), Encoding.UTF8, "application/json")
-            };
-            var httpResponseMessage = await client.SendAsync(httpRequestMessage);
-            httpResponseMessage.EnsureSuccessStatusCode();
-            var assignationAdd = await httpResponseMessage.Content.ReadFromJsonAsync<AssignationDto>();
+                var Content = new StringContent(System.Text.Json.JsonSerializer.Serialize(assignationAddDto),
+                        Encoding.UTF8, "application/json");
+                var Requset = await _aPIService.PostDataAsync(ApiRequests.AssignationCreate, assignationAddDto);
+                if (Requset.IsSuccessStatusCode)
+                {
+                    var assignationAdd = await Requset.Content.ReadFromJsonAsync<AssignationDto>();
 
-            // Order Switch to Assigned
-            var request = new OrderDto();
-            request.Id = assignationAddDto.OrderId;
-            var httpRequestMessageAssign = new HttpRequestMessage()
-            {
-                Method = HttpMethod.Put,
-                RequestUri = new Uri(ApiRequests.OrderUpdateAss + $"/{request.Id}"),
-                Content = new StringContent(System.Text.Json.JsonSerializer.Serialize(request), Encoding.UTF8, "application/json")
-            };
-            var httpResponseMessageAssign = await client.SendAsync(httpRequestMessageAssign);
-            httpResponseMessageAssign.EnsureSuccessStatusCode();
-           
-
-            //---------------------------------
-            if (assignationAdd != null)
-            {
-                //return RedirectToAction("Index", "Assignation");
-                return Ok();
+                    var orderRequset = await _aPIService.PutDataAsync(ApiRequests.OrderUpdateAss +
+                        $"/{assignationAddDto.OrderId}", null);
+                    if (orderRequset.IsSuccessStatusCode)
+                    {
+                        return Ok();
+                    }
+                  
+                   
+                }
+                return BadRequest("Error");
             }
-            return View();
+            catch (Exception)
+            {
+
+                return BadRequest("Error");
+            }
         }
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var client = _httpClientFactory.CreateClient();
-            var response = await client.GetFromJsonAsync<AssignationDto>(ApiRequests.AssignationApi + $"/{id.ToString()}");
-            if (response is not null)
+            var Requset = await _aPIService.GetAsync(ApiRequests.AssignationApi + $"/{id.ToString()}");
+            if (Requset.IsSuccessStatusCode)
             {
-                var responseassign = await client.GetAsync(ApiRequests.AssignApi);
-                responseassign.EnsureSuccessStatusCode();
-                var json = await responseassign.Content.ReadAsStringAsync();
+                var json = await Requset.Content.ReadAsStringAsync();
                 var assignlist = JsonConvert.DeserializeObject<List<AssignDto>>(json);
                 ViewBag.assignlist = assignlist;
-                return View(response);
+                return View(assignlist);
             }
+
             return View(null);
         }
         [HttpPost]
         public async Task<IActionResult> Edit(AssignationDto request)
         {
-            var client = _httpClientFactory.CreateClient();
-            var httpRequestMessage = new HttpRequestMessage()
+            var Requset = await _aPIService.PutDataAsync(ApiRequests.AssignationUpdate + $"/{request.Id}", request);
+            if (Requset.IsSuccessStatusCode)
             {
-                Method = HttpMethod.Put,
-                RequestUri = new Uri(ApiRequests.AssignationUpdate + $"/{request.Id}"),
-                Content = new StringContent(System.Text.Json.JsonSerializer.Serialize(request), Encoding.UTF8, "application/json")
-            };
-            var httpResponseMessage = await client.SendAsync(httpRequestMessage);
-            httpResponseMessage.EnsureSuccessStatusCode();
-
-            var respose = await httpResponseMessage.Content.ReadFromJsonAsync<AssignationDto>();
-
-            if (respose is not null)
-            {
-                return RedirectToAction("Index", "Assignation");
+                var respose = await Requset.Content.ReadFromJsonAsync<AssignationDto>();
+                if (respose is not null)
+                {
+                    return RedirectToAction("Index", "Assignation");
+                }
             }
             return View();
         }
@@ -121,9 +108,8 @@ namespace CoralSeaTaskManagment.Ui.Controllers
         {
             try
             {
-                var client = _httpClientFactory.CreateClient();
-                var httpResponseMessage = await client.DeleteAsync(ApiRequests.AssignationDelete + $"/{request.Id}");
-                httpResponseMessage.EnsureSuccessStatusCode();
+                var Requset = await _aPIService.DeleteDataAsync(ApiRequests.AssignationDelete + $"/{request.Id}");
+                if (Requset.IsSuccessStatusCode)
                 return RedirectToAction("Index", "Assignation");
             }
             catch (Exception ex)
@@ -136,71 +122,60 @@ namespace CoralSeaTaskManagment.Ui.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateForm(AssignationAddDto assignationAddDto)
         {
-            var client = _httpClientFactory.CreateClient();
-            var httpRequestMessage = new HttpRequestMessage()
+            try
             {
-                Method = HttpMethod.Post,
-                RequestUri = new Uri(ApiRequests.AssignationCreate),
-                Content = new StringContent(System.Text.Json.JsonSerializer.Serialize(assignationAddDto), Encoding.UTF8, "application/json")
-            };
-            var httpResponseMessage = await client.SendAsync(httpRequestMessage);
-            httpResponseMessage.EnsureSuccessStatusCode();
-            var assignationAdd = await httpResponseMessage.Content.ReadFromJsonAsync<AssignationDto>();
+                var Content = new StringContent(System.Text.Json.JsonSerializer.Serialize(assignationAddDto),
+                        Encoding.UTF8, "application/json");
+                var Requset = await _aPIService.PostDataAsync(ApiRequests.AssignationCreate, assignationAddDto);
+                if (Requset.IsSuccessStatusCode)
+                {
+                    var assignationAdd = await Requset.Content.ReadFromJsonAsync<AssignationDto>();
 
-            // Order Switch to Assigned
-            var request = new OrderDto();
-            request.Id = assignationAddDto.OrderId;
-            var httpRequestMessageAssign = new HttpRequestMessage()
-            {
-                Method = HttpMethod.Put,
-                RequestUri = new Uri(ApiRequests.OrderUpdateAss + $"/{request.Id}"),
-                Content = new StringContent(System.Text.Json.JsonSerializer.Serialize(request), Encoding.UTF8, "application/json")
-            };
-            var httpResponseMessageAssign = await client.SendAsync(httpRequestMessageAssign);
-            httpResponseMessageAssign.EnsureSuccessStatusCode();
+                    var orderRequset = await _aPIService.PutDataAsync(ApiRequests.OrderUpdateAss +
+                        $"/{assignationAddDto.OrderId}", null);
+                    if (orderRequset.IsSuccessStatusCode)
+                    {
+                        return Ok();
+                    }
 
 
-            //---------------------------------
-            if (assignationAdd != null)
-            {
-                return RedirectToAction("Index", "Assignation"); 
+                }
+                return BadRequest("Error");
             }
-            return View();
+            catch (Exception)
+            {
+
+                return BadRequest("Error");
+            }
         }
         [HttpPost]
         public async Task<IActionResult> CreateModal([FromBody] AssignationAddDto assignationAddDto)
         {
-            var client = _httpClientFactory.CreateClient();
-            var httpRequestMessage = new HttpRequestMessage()
+            try
             {
-                Method = HttpMethod.Post,
-                RequestUri = new Uri(ApiRequests.AssignationCreate),
-                Content = new StringContent(System.Text.Json.JsonSerializer.Serialize(assignationAddDto), Encoding.UTF8, "application/json")
-            };
-            var httpResponseMessage = await client.SendAsync(httpRequestMessage);
-            httpResponseMessage.EnsureSuccessStatusCode();
-            var assignationAdd = await httpResponseMessage.Content.ReadFromJsonAsync<AssignationDto>();
+                var Content = new StringContent(System.Text.Json.JsonSerializer.Serialize(assignationAddDto),
+                        Encoding.UTF8, "application/json");
+                var Requset = await _aPIService.PostDataAsync(ApiRequests.AssignationCreate, assignationAddDto);
+                if (Requset.IsSuccessStatusCode)
+                {
+                    var assignationAdd = await Requset.Content.ReadFromJsonAsync<AssignationDto>();
 
-            // Order Switch to Assigned
-            var request = new OrderDto();
-            request.Id = assignationAddDto.OrderId;
-            var httpRequestMessageAssign = new HttpRequestMessage()
-            {
-                Method = HttpMethod.Put,
-                RequestUri = new Uri(ApiRequests.OrderUpdateAss + $"/{request.Id}"),
-                Content = new StringContent(System.Text.Json.JsonSerializer.Serialize(request), Encoding.UTF8, "application/json")
-            };
-            var httpResponseMessageAssign = await client.SendAsync(httpRequestMessageAssign);
-            httpResponseMessageAssign.EnsureSuccessStatusCode();
+                    var orderRequset = await _aPIService.PutDataAsync(ApiRequests.OrderUpdateAss +
+                        $"/{assignationAddDto.OrderId}", null);
+                    if (orderRequset.IsSuccessStatusCode)
+                    {
+                        return Ok();
+                    }
 
 
-            //---------------------------------
-            if (assignationAdd != null)
-            {
-                //return RedirectToAction("Index", "Assignation");
-                return Ok();
+                }
+                return BadRequest("Error");
             }
-            return View();
+            catch (Exception)
+            {
+
+                return BadRequest("Error");
+            }
         }
     }
 }

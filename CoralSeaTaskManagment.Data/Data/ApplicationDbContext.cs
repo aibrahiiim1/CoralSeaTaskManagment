@@ -1,4 +1,5 @@
 ﻿using CoralSeaTaskManagment.Model.Models.Domain;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,12 +9,16 @@ using System.Threading.Tasks;
 
 namespace CoralSeaTaskManagment.Data.Data
 {
-    public class ApplicationDbContext:DbContext
+    public class ApplicationDbContext: DbContext
     {
-        public ApplicationDbContext(DbContextOptions dbContextOptions):base(dbContextOptions) 
-        { 
-
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+ : base(options)
+        {
         }
+        //public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) :base(options) 
+        //{ 
+
+        //}
         public DbSet<Hotel> Hotels { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<Location> Locations { get; set; }
@@ -34,6 +39,8 @@ namespace CoralSeaTaskManagment.Data.Data
         public DbSet<Outgoing> Outgoings { get; set; }
         public DbSet<Spart> Sparts { get; set; }
         public DbSet<Scheduale> Scheduales { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
     }
 }

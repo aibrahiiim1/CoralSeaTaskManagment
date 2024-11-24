@@ -3,12 +3,14 @@ using CoralSeaTaskManagment.Api.Models.DTO;
 using CoralSeaTaskManagment.Data.Data;
 using CoralSeaTaskManagment.Model.Models.Domain;
 using CoralSeaTaskManagment.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
 
 namespace CoralSeaTaskManagment.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class OrderController : ControllerBase
@@ -86,6 +88,7 @@ namespace CoralSeaTaskManagment.Api.Controllers
             return Ok(Dto);
         }
 
+       
         [HttpDelete]
         [Route("{id:int}")]
         public IActionResult Delete([FromRoute] int id)

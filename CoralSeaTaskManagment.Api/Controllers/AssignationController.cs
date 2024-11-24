@@ -3,11 +3,13 @@ using CoralSeaTaskManagment.Api.Models.DTO;
 using CoralSeaTaskManagment.Data.Data;
 using CoralSeaTaskManagment.Model.Models.Domain;
 using CoralSeaTaskManagment.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CoralSeaTaskManagment.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AssignationController : ControllerBase

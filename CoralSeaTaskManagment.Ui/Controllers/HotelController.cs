@@ -1,4 +1,6 @@
-﻿using CoralSeaTaskManagment.Ui.Models;
+﻿using CoralSeaTaskManagment.Services;
+using CoralSeaTaskManagment.Ui.Helper;
+using CoralSeaTaskManagment.Ui.Models;
 using CoralSeaTaskManagment.Ui.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
@@ -10,9 +12,11 @@ namespace CoralSeaTaskManagment.Ui.Controllers
     public class HotelController : Controller
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        public HotelController(IHttpClientFactory httpClientFactory)
+        private readonly APIService _aPIService;
+        public HotelController(IHttpClientFactory httpClientFactory, APIService aPIService )
         {
             this._httpClientFactory = httpClientFactory;
+            _aPIService= aPIService;
         }
         public async Task<IActionResult> Index()
         {
@@ -21,11 +25,14 @@ namespace CoralSeaTaskManagment.Ui.Controllers
             // Get All Hotels
             try
             {
-                var client = _httpClientFactory.CreateClient();
-                var hotels = await client.GetAsync("https://localhost:7097/api/hotel");
-                hotels.EnsureSuccessStatusCode();
-                hotelsList.AddRange( await hotels.Content.ReadFromJsonAsync<IEnumerable<HotelDto>>());
-                //ViewBag.Hotels = hotelsBody;
+             var check=   Identity.Token;
+              var Requset = await _aPIService.GetAsync(ApiRequests.HotelApi);
+                if (Requset.IsSuccessStatusCode)
+                {
+                    hotelsList.AddRange(await Requset.Content.
+                        ReadFromJsonAsync<IEnumerable<HotelDto>>());
+                  //  ViewBag.Hotels = hotelsBody;
+                }            
             }
             catch (Exception ex)
             {
@@ -42,76 +49,52 @@ namespace CoralSeaTaskManagment.Ui.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(HotelAddDto model)
         {
-            var client = _httpClientFactory.CreateClient();
-
-            var httpRequestMessage = new HttpRequestMessage()
-            {
-                Method = HttpMethod.Post,
-                RequestUri = new Uri(ApiRequests.HotelCreate),
-                Content = new StringContent(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json")
-            };
-
-            var httpResponseMessage = await client.SendAsync(httpRequestMessage);
-            httpResponseMessage.EnsureSuccessStatusCode();
-
-            var respose = await httpResponseMessage.Content.ReadFromJsonAsync<HotelDto>();
-
-            if (respose is not null)
+           
+            var Requset = await _aPIService.PostDataAsync(ApiRequests.HotelCreate, model);
+            if (Requset.IsSuccessStatusCode)
             {
                 return RedirectToAction("Index", "Hotel");
             }
-
+           
             return View();
         }
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var client = _httpClientFactory.CreateClient();
-
-            var response = await client.GetFromJsonAsync<HotelDto>(ApiRequests.HotelApi+$"/{id.ToString()}");
-
-            if (response is not null)
+            var Requset = await _aPIService.GetAsync(ApiRequests.HotelApi + $"/{id.ToString()}");
+            if (Requset.IsSuccessStatusCode)
             {
-                return View(response);
+                var respose = await Requset.Content.ReadFromJsonAsync<HotelDto>();
+                if (respose is not null)
+                {
+                    return View(respose);
+                }
             }
-
+            
             return View(null);
         }
         [HttpPost]
         public async Task<IActionResult> Edit(HotelDto request)
         {
-            var client = _httpClientFactory.CreateClient();
-
-            var httpRequestMessage = new HttpRequestMessage()
-            {
-                Method = HttpMethod.Put,
-                RequestUri = new Uri(ApiRequests.HotelUpdate+$"/{request.Id}"),
-                Content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json")
-            };
-
-            var httpResponseMessage = await client.SendAsync(httpRequestMessage);
-            httpResponseMessage.EnsureSuccessStatusCode();
-
-            var respose = await httpResponseMessage.Content.ReadFromJsonAsync<HotelDto>();
-
-            if (respose is not null)
+            var Requset = await _aPIService.PutDataAsync(ApiRequests.HotelUpdate + $"/{request.Id}", request);
+            if (Requset.IsSuccessStatusCode)
             {
                 return RedirectToAction("Index", "Hotel");
             }
-
             return View();
         }                
         public async Task<IActionResult> Delete(HotelDto request)
         {
             try
             {
-                var client = _httpClientFactory.CreateClient();
+                
+                var Requset = await _aPIService.DeleteDataAsync(ApiRequests.HotelDelete + $"/{request.Id}");
 
-                var httpResponseMessage = await client.DeleteAsync(ApiRequests.HotelDelete+$"/{request.Id}");
-
-                httpResponseMessage.EnsureSuccessStatusCode();
-
-                return RedirectToAction("Index", "Hotel");
+                if (Requset.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("Index", "Hotel");
+                }
+              
             }
             catch (Exception ex)
             {

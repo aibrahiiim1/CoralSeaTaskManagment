@@ -1,0 +1,100 @@
+﻿@* @page "/login" *@
+@* RenderMode InteractiveServer *@
+@using CoralSeaTaskManagment.Ui.Models.DTO
+@model AuthRequest
+ 
+@{
+    Layout = "~/Views/Shared/_Empty.cshtml";
+
+}
+
+@* <h1>@ViewData["Title"]</h1> *@
+<body style="background-image: url('/img/img_girl.jpg');background-size: 100% 100%;
+    background-position: center center;background-repeat: no-repeat;">
+
+    <div style="min-height:80vh;display: flex;
+    flex-direction: column;
+    justify-content: center;">
+        <div class="row justify-content-center ">
+
+            <div class="col-md-5">
+                <section style="padding: 24px 9px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fbfbfb;">
+                    <form id="account" method="post">
+                        <div class="text-center">
+                            <a class="brand-link d-flex justify-content-center">
+                                <img src="~/img/logo.jpg" alt="Coral Sea" style="max-height: 50%;
+    width: 50%;
+    object-fit: contain;
+    border-radius: 6px;">
+                            </a>
+                            <h5 class="mt-2">Welcome To Management Orders</h5>
+                        </div>
+
+                        <hr />
+                        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                        <div class="form-floating mb-3">
+                            <input asp-for="Username" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                            <label asp-for="Username" class="form-label">Email</label>
+                            <span asp-validation-for="Username" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input asp-for="Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
+                            <label asp-for="Password" class="form-label">Password</label>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div>
+                            <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
+                        </div>
+
+                    </form>
+                </section>
+            </div>
+            </<div>
+                </div>
+                </div>
+            </div>
+</body>
+@section Scripts {
+    <script>
+
+                // cookies.js
+    function setCookie(name, value, days) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    }
+
+    function deleteCookie(name) {
+        document.cookie = name + '=; Max-Age=-99999999;';
+    }
+
+    function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+        </script>
+}
+<script>
+    window.onload = function () {
+
+
+        // This will be executed only after the page has fully loaded in the browser
+        console.log("Page is fully loaded");
+
+        // Example of calling JS interop here (or your `CookieService`)
+        // You can trigger JS interop from here
+    };
+</script>
